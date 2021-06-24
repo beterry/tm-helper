@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/tm-helper/static/css/main.c3cf4c08.chunk.css",
+    "main.js": "/tm-helper/static/js/main.a84dbc4a.chunk.js",
+    "main.js.map": "/tm-helper/static/js/main.a84dbc4a.chunk.js.map",
+    "runtime-main.js": "/tm-helper/static/js/runtime-main.aae88f2c.js",
+    "runtime-main.js.map": "/tm-helper/static/js/runtime-main.aae88f2c.js.map",
+    "static/js/2.94a09018.chunk.js": "/tm-helper/static/js/2.94a09018.chunk.js",
+    "static/js/2.94a09018.chunk.js.map": "/tm-helper/static/js/2.94a09018.chunk.js.map",
+    "index.html": "/tm-helper/index.html",
+    "static/css/main.c3cf4c08.chunk.css.map": "/tm-helper/static/css/main.c3cf4c08.chunk.css.map",
+    "static/js/2.94a09018.chunk.js.LICENSE.txt": "/tm-helper/static/js/2.94a09018.chunk.js.LICENSE.txt",
+    "static/media/Energy.ff9d286b.svg": "/tm-helper/static/media/Energy.ff9d286b.svg",
+    "static/media/Greenery.ba1b4ebf.svg": "/tm-helper/static/media/Greenery.ba1b4ebf.svg",
+    "static/media/Heat.4672d9d0.svg": "/tm-helper/static/media/Heat.4672d9d0.svg",
+    "static/media/ME.536da777.svg": "/tm-helper/static/media/ME.536da777.svg",
+    "static/media/Minus.0ca4ec73.svg": "/tm-helper/static/media/Minus.0ca4ec73.svg",
+    "static/media/Ocean.e7d38271.svg": "/tm-helper/static/media/Ocean.e7d38271.svg",
+    "static/media/Plants.6070467c.svg": "/tm-helper/static/media/Plants.6070467c.svg",
+    "static/media/Steel.32513866.svg": "/tm-helper/static/media/Steel.32513866.svg",
+    "static/media/TR.6fdd0556.svg": "/tm-helper/static/media/TR.6fdd0556.svg",
+    "static/media/Temp.c0e14c2d.svg": "/tm-helper/static/media/Temp.c0e14c2d.svg",
+    "static/media/Titanium.8be1d001.svg": "/tm-helper/static/media/Titanium.8be1d001.svg",
+    "static/media/heat-conversion.b2fc9302.svg": "/tm-helper/static/media/heat-conversion.b2fc9302.svg",
+    "static/media/plants-conversion.04fca812.svg": "/tm-helper/static/media/plants-conversion.04fca812.svg",
+    "static/media/steel-conversion.21e1ff41.svg": "/tm-helper/static/media/steel-conversion.21e1ff41.svg",
+    "static/media/titanium-conversion.703b3fca.svg": "/tm-helper/static/media/titanium-conversion.703b3fca.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.aae88f2c.js",
+    "static/js/2.94a09018.chunk.js",
+    "static/css/main.c3cf4c08.chunk.css",
+    "static/js/main.a84dbc4a.chunk.js"
+  ]
+}
