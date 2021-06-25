@@ -25,33 +25,35 @@ const ResourceCard = ({
     children
 }) => {
     return (
-        <CardContainer>
-            <CardHeader color={color} darkText={darkText}>
-                <CardTitle>{title}</CardTitle>
-                <CardIcon src={icon} alt='icon' />
-            </CardHeader>
-            <FlexWrapper>
-                <AvailableNumber>{available}</AvailableNumber>
-                <ProductionContainer>
-                    <IncrementProduction onClick={() => incrementProd(-1)} disabled={production <= 0}>
-                        <span className="material-icons">
-                            arrow_left
-                        </span>
-                    </IncrementProduction>
-                    <Production>{production}</Production>
-                    <IncrementProduction onClick={() => incrementProd(1)}>
-                        <span className="material-icons">
-                            arrow_right
-                        </span>
-                    </IncrementProduction>
-                </ProductionContainer>
-            </FlexWrapper>
-            <Cubes current={available} increment={increment} />
-            <ConversionContainer>
-                {conversion}
-                {conversionAvailable && <ConversionButton onClick={() => conversionAction()} color={color}>{conversionText}</ConversionButton>}
-            </ConversionContainer>
-        </CardContainer>
+        <Wrapper id={title}>
+            <CardContainer>
+                <CardHeader color={color} darkText={darkText}>
+                    <CardTitle>{title}</CardTitle>
+                    <CardIcon src={icon} alt='icon' />
+                </CardHeader>
+                <FlexWrapper>
+                    <AvailableNumber>{available}</AvailableNumber>
+                    <ProductionContainer>
+                        <IncrementProduction onClick={() => incrementProd(-1)} disabled={production <= 0}>
+                            <span className="material-icons">
+                                arrow_left
+                            </span>
+                        </IncrementProduction>
+                        <Production>{production}</Production>
+                        <IncrementProduction onClick={() => incrementProd(1)}>
+                            <span className="material-icons">
+                                arrow_right
+                            </span>
+                        </IncrementProduction>
+                    </ProductionContainer>
+                </FlexWrapper>
+                <Cubes current={available} increment={increment} />
+                <ConversionContainer>
+                    {conversion}
+                    {conversionAvailable && <ConversionButton onClick={() => conversionAction()} color={color}>{conversionText}</ConversionButton>}
+                </ConversionContainer>
+            </CardContainer>
+        </Wrapper>
     )
 }
 
@@ -63,7 +65,7 @@ const TRCard = ({
     icon
 }) => {
     return(
-        <CardContainer>
+        <TRCardContainer>
             <CardHeader color={color} darkText={darkText}>
                 <CardTitle>Terraform Rating</CardTitle>
                 <CardIcon src={icon} alt='icon' />
@@ -83,18 +85,27 @@ const TRCard = ({
                     <img src={minusIcon} alt='Minus TR' />
                 </GlobalParam>
             </GlobalParamContainer>
-        </CardContainer>
+        </TRCardContainer>
     )
 }
 
-const CardContainer = styled.section`
+const Wrapper = styled.section`
+    padding-top: 24px;
+
+`
+
+const CardContainer = styled.div`
     background-color: white;
     padding: 16px;
     border-radius: 4px;
-    box-shadow: 0px 3px 6px rgba(0,0,0,.25);
+    box-shadow: 0px 0px 10px rgba(0,0,0,.35);
+
     overflow: hidden;
-    margin: 24px 0;
 `;
+
+const TRCardContainer = styled(CardContainer)`
+    margin: 24px 0;
+`
 
 const CardHeader = styled.div`
     color: ${props => props.darkText ? 'black' : 'white'};
@@ -110,7 +121,7 @@ const CardHeader = styled.div`
 const CardTitle = styled.h3`
     font-size: 1rem;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 500;
     margin: 0;
     letter-spacing: 1px;
 `
@@ -120,14 +131,16 @@ const CardIcon = styled.img`
 `
 
 const AvailableNumber = styled.h2`
-    font-size: 4rem;
+    font-size: 4.5rem;
     font-weight: 700;
     margin: 0;
+    font-family: 'Share Tech', sans-serif;
 `
 
 const FlexWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    margin-top: 8px;
 `
 
 const ProductionContainer = styled.div`

@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+//import constants
+import {COLORS} from './constants';
+
 //import components
 import {ResourceCard, TRCard} from './components/Card';
+import ResourceOverview from './components/ResourceOverview';
 
 //import icons
 import trIcon from './icons/TR.svg';
-import meIcon from './icons/ME.svg';
+import mcIcon from './icons/ME.svg';
 import steelIcon from './icons/Steel.svg';
 import titaniumIcon from './icons/Titanium.svg';
 import plantsIcon from './icons/Plants.svg';
@@ -26,19 +30,22 @@ function App() {
 
     const incrementTR = (amount) => {
         setTR(tr + amount);
+        addToLog('TR ' + (amount<0?"":"+") + amount);
     }
 
     //================ ME ================
-    const [meAvailable, setMeAvailable] = useState(0);
-    const [meProd, setMeProd] = useState(0);
+    const [mcAvailable, setMcAvailable] = useState(0);
+    const [mcProd, setMcProd] = useState(0);
 
     
-    const incrementME = (amount) => {
-        setMeAvailable(meAvailable + amount);
+    const incrementMC = (amount) => {
+        setMcAvailable(mcAvailable + amount);
+        addToLog('MegaCredits ' + (amount<0?"":"+") + amount);
     }
     
-    const incrementMeProd = (amount) => {
-        setMeProd(meProd + amount);
+    const incrementMcProd = (amount) => {
+        setMcProd(mcProd + amount);
+        addToLog('MegaCredit production ' + (amount<0?"":"+") + amount);
     }
 
     //================ STEEL ================
@@ -48,10 +55,12 @@ function App() {
     
     const incrementSteel = (amount) => {
         setSteelAvailable(steelAvailable + amount);
+        addToLog('Steel ' + (amount<0?"":"+") + amount);
     }
     
     const incrementSteelProd = (amount) => {
         setSteelProd(steelProd + amount);
+        addToLog('Steel production ' + (amount<0?"":"+") + amount);
     }
 
     //================ TITANIUM ================
@@ -61,10 +70,12 @@ function App() {
     
     const incrementTitanium = (amount) => {
         setTitaniumAvailable(titaniumAvailable + amount);
+        addToLog('Titanium ' + (amount<0?"":"+") + amount);
     }
     
     const incrementTitaniumProd = (amount) => {
         setTitaniumProd(titaniumProd + amount);
+        addToLog('Titanium production' + (amount<0?"":"+") + amount);
     }
 
     //================ PLANTS ================
@@ -74,10 +85,12 @@ function App() {
     
     const incrementPlants = (amount) => {
         setPlantsAvailable(plantsAvailable + amount);
+        addToLog('Plants ' + (amount<0?"":"+") + amount);
     }
     
     const incrementPlantProd = (amount) => {
         setPlantProd(plantProd + amount);
+        addToLog('Plant production ' + (amount<0?"":"+") + amount);
     }
 
     //================ ENERGY ================
@@ -87,10 +100,12 @@ function App() {
     
     const incrementEnergy = (amount) => {
         setEnergyAvailable(energyAvailable + amount);
+        addToLog('Energy ' + (amount<0?"":"+") + amount);
     }
     
     const incrementEnergyProd = (amount) => {
         setEnergyProd(energyProd + amount);
+        addToLog('Energy production ' + (amount<0?"":"+") + amount);
     }
 
     //================ HEAT ================
@@ -100,16 +115,18 @@ function App() {
     
     const incrementHeat = (amount) => {
         setHeatAvailable(heatAvailable + amount);
+        addToLog('Heat ' + (amount<0?"":"+") + amount);
     }
     
     const incrementHeatProd = (amount) => {
         setHeatProd(heatProd + amount);
+        addToLog('Heat production' + (amount<0?"":"+") + amount);
     }
     
     //================ ACTIONS ================
     const produce = () => {
         //ME
-        setMeAvailable(meAvailable + meProd + tr);
+        setMcAvailable(mcAvailable + mcProd + tr);
 
         //Steel
         setSteelAvailable(steelAvailable + steelProd);
@@ -129,27 +146,89 @@ function App() {
         setEnergyAvailable(energyProd);
 
         toggleProductionChoice();
+        addToLog('Production Phase');
     }
 
     const plantConversion = () => {
         setPlantsAvailable(plantsAvailable - 8);
         setTR(tr + 1);
+        addToLog('Converted plants to Greenery tile');
     }
 
     const heatConversion = () => {
         setHeatAvailable(heatAvailable - 8);
         setTR(tr + 1);
+        addToLog('Converted heat to raise the temperature');
     }
 
     //================ MISC STATE ================
     const [showProductionChoice, setShowProductionChoice] = useState(false);
+    const [log, setLog] = useState([]);
 
     const toggleProductionChoice = () => {
         setShowProductionChoice(!showProductionChoice);
     }
 
+    const addToLog = (action) => {
+        setLog(prevLog => [action, ...prevLog.slice(0, 24)]);
+    }
+
     return (
         <MainWrapper className="App">
+
+            <Heading>Overview</Heading>
+
+            <TRCard
+                tr={tr}
+                increment={incrementTR}
+                icon={trIcon}
+            />
+
+            <Overview>
+                <ResourceOverview
+                    anchor='MegaCredits'
+                    amount={mcAvailable}
+                    icon={mcIcon}
+                    color={COLORS.mc.bk}
+                    textColor={COLORS.mc.text}
+                />
+                <ResourceOverview
+                    anchor='Steel'
+                    amount={steelAvailable}
+                    icon={steelIcon}
+                    color={COLORS.steel.bk}
+                    textColor={COLORS.steel.text}
+                />
+                <ResourceOverview
+                    anchor='Titanium'
+                    amount={titaniumAvailable}
+                    icon={titaniumIcon}
+                    color={COLORS.titanium.bk}
+                    textColor={COLORS.titanium.text}
+                />
+                <ResourceOverview
+                    anchor='Plants'
+                    amount={plantsAvailable}
+                    icon={plantsIcon}
+                    color={COLORS.plants.bk}
+                    textColor={COLORS.plants.text}
+                />
+                <ResourceOverview
+                    anchor='Energy'
+                    amount={energyAvailable}
+                    icon={energyIcon}
+                    color={COLORS.energy.bk}
+                    textColor={COLORS.energy.text}
+                />
+                <ResourceOverview
+                    anchor='Heat'
+                    amount={heatAvailable}
+                    icon={heatIcon}
+                    color={COLORS.heat.bk}
+                    textColor={COLORS.heat.text}
+                />
+            </Overview>
+
             {showProductionChoice
                 ? 
                 <ProductionChoiceContainer>
@@ -160,21 +239,19 @@ function App() {
                 <ProductionButton onClick={() => toggleProductionChoice()}>Production Phase</ProductionButton>
             }
 
-            <TRCard
-                tr={tr}
-                increment={incrementTR}
-                icon={trIcon}
-            />
+            <SectionPadding />
+
+            <Heading>Edit Resources</Heading>
 
             <ResourceCard
                 title = 'MegaCredits'
-                available = {meAvailable}
-                increment={incrementME}
-                production = {meProd}
-                incrementProd = {incrementMeProd}
-                color='#FFE600'
+                available = {mcAvailable}
+                increment={incrementMC}
+                production = {mcProd}
+                incrementProd = {incrementMcProd}
+                color={COLORS.mc.bk}
                 darkText={true}
-                icon={meIcon}
+                icon={mcIcon}
             />
 
             <ResourceCard
@@ -183,7 +260,7 @@ function App() {
                 increment={incrementSteel}
                 production = {steelProd}
                 incrementProd = {incrementSteelProd}
-                color='#976138'
+                color={COLORS.steel.bk}
                 icon={steelIcon}
                 conversion={<ConversionGraphic src={steelConversionGraphic} alt='Building tag : steel resource = 2 me'/>}
             />
@@ -194,7 +271,7 @@ function App() {
                 increment={incrementTitanium}
                 production = {titaniumProd}
                 incrementProd = {incrementTitaniumProd}
-                color='#000000'
+                color={COLORS.titanium.bk}
                 icon={titaniumIcon}
                 conversion={<ConversionGraphic src={titaniumConversionGraphic} alt='Space tag : titanium resource = 3 me'/>}
             />
@@ -205,7 +282,7 @@ function App() {
                 increment={incrementPlants}
                 production = {plantProd}
                 incrementProd = {incrementPlantProd}
-                color='#6CB526'
+                color={COLORS.plants.bk}
                 icon={plantsIcon}
                 conversion={<ConversionGraphic src={plantConversionGraphic} alt='8 plant tags -> Greenery tile'/>}
                 conversionAction={plantConversion}
@@ -219,7 +296,7 @@ function App() {
                 increment={incrementEnergy}
                 production = {energyProd}
                 incrementProd = {incrementEnergyProd}
-                color='#94308B'
+                color={COLORS.energy.bk}
                 icon={energyIcon}
                 conversion={<p>Leftover energy is converted to heat</p>}
             />
@@ -230,7 +307,7 @@ function App() {
                 increment={incrementHeat}
                 production = {heatProd}
                 incrementProd = {incrementHeatProd}
-                color='#EA4929'
+                color={COLORS.heat.bk}
                 icon={heatIcon}
                 conversion={<ConversionGraphic src={heatConversionGraphic} alt='8 heat tags -> Raise temperature'/>}
                 conversionAction={heatConversion}
@@ -238,16 +315,37 @@ function App() {
                 conversionText='Raise Temperature'
             />
 
+            <SectionPadding />
+
+            <Heading>Log</Heading>
+
+            <LogContainer>
+                {log.length === 0 && <p>Your actions will appear here</p>}
+                {log.map((action, i) => <p key={i}>{action}</p>)}
+            </LogContainer>
+
         </MainWrapper>
     );
 }
 
 const MainWrapper = styled.main`
     min-height: 100%;
-    background-color: #F5F5F5;
-
     padding: 16px;
 `;
+
+const Heading = styled.h2`
+    font-size: 2.25rem;
+    margin: 0;
+    font-weight: 700;
+    font-family: 'Share Tech', sans-serif;
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    border-bottom: 1px solid lightgray;
+`
+
+const SectionPadding = styled.div`
+    height: 2.5rem;
+`
 
 const ConversionGraphic = styled.img`
     height: 32px;
@@ -265,6 +363,7 @@ const ProductionButton = styled.button`
     text-transform: uppercase;
     letter-spacing: 1.5px;
     width: 100%;
+    margin: 24px 0;
 `
 
 const ProductionChoiceContainer = styled.div`
@@ -276,6 +375,21 @@ const ProductionChoiceContainer = styled.div`
 const CancelButton = styled(ProductionButton)`
     background-color: white;
     color: black;
+`
+
+const Overview = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+`
+
+const LogContainer = styled.div`
+    padding: 16px 0;
+    p{
+        font-family: 'Share Tech', sans-serif;
+        margin: 8px 0;
+        opacity: .75;
+    }
 `
 
 export default App;
