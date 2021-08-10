@@ -8,7 +8,7 @@ import Cube from './Cube';
 import addIcon from '../icons/add-icon.svg';
 
 const SupplyCard = ({
-    resource,
+    title,
     supply,
     increment,
     icon,
@@ -26,19 +26,25 @@ const SupplyCard = ({
 
     const handleTapAdd = (e) => {
         e.preventDefault();
-        setIncrementBy(1);
+
+        resetCubes();
+
+        if (incrementBy >= 0){
+            //if we are in the process of adding
+            setIncrementBy(incrementBy + 1);
+        }else {
+            //if we are transitioning from subtracting to adding
+            setIncrementBy(1);
+        }
+
         setShowForm(true);
     }
 
     const handleTapCancel = (e) => {
         e.preventDefault();
 
-        let newCubes = [...cubes];
-        newCubes.forEach(cube => {
-            cube.isTouched = false;
-        })
+        resetCubes();
 
-        setCubes(newCubes);
         setIncrementBy(0);
         setShowForm(false);
     }
@@ -48,12 +54,28 @@ const SupplyCard = ({
         let touchedCube = cubes[i];
         let newCubes = [...cubes];
 
+        //toggle the opacity of the touched cube
         touchedCube.isTouched = !touchedCube.isTouched;
+        //replace existing cube with the new one
         newCubes.splice(i, 1, touchedCube);
+
+        if (incrementBy > 0){
+            //if we are transitioning from adding to subtracting
+            setIncrementBy(- step);
+        } else {
+            //if we are in process of subtracting
+            setIncrementBy(incrementBy - step);
+        }
         
-        setIncrementBy(incrementBy - step);
         setCubes(newCubes);
         setShowForm(true);
+    }
+
+    const resetCubes = () => {
+        let newCubes = [...cubes];
+        newCubes.forEach(cube => {
+            cube.isTouched = false;
+        })
     }
 
     useEffect(() => {
@@ -107,18 +129,13 @@ const SupplyCard = ({
 
     return (
         <Wrapper>
+            <Title>{title}</Title>
             <Header>
                 <Icon src={icon} alt=''/>
                 <Supply>{supply}</Supply>
                 {showForm &&
                     <AfterIncrement>{supply + incrementBy}</AfterIncrement>
                 }
-                <HeaderSpace />
-                <AddButton
-                    onClick={(e) => handleTapAdd(e)}
-                >
-                    <AddIcon src={addIcon} alt='Add'/>
-                </AddButton>
             </Header>
             {supply > 0 && 
                 <CubeWrapper>
@@ -153,6 +170,11 @@ const SupplyCard = ({
                     </CancelButton>
                 </IncrementForm>
             }
+            <AddButton
+                onClick={(e) => handleTapAdd(e)}
+            >
+                <AddIcon src={addIcon} alt='Add'/>
+            </AddButton>
         </Wrapper>
     )
 }
@@ -161,6 +183,18 @@ const Wrapper = styled.div`
     background-color: ${COLORS.cardBK};
     border-radius: 8px;
     padding: 16px;
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Title = styled.h2`
+    font-size: .875rem;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    font-weight: 400;
+    margin-bottom: 8px;
 `;
 
 const Header = styled.div`
@@ -168,12 +202,8 @@ const Header = styled.div`
     align-items: center;
 `;
 
-const HeaderSpace = styled.div`
-    flex-grow: 1;
-;`
-
 const Supply = styled.h3`
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 700;
     margin-right: 8px;
 `;
@@ -189,6 +219,9 @@ const Icon = styled.img`
 `;
 
 const AddButton = styled.button`
+    position: absolute;
+    top: 16px;
+    right: 16px;
     background-color: transparent;
     width: 40px;
     height: 40px;
@@ -202,10 +235,12 @@ const AddButton = styled.button`
 const AddIcon = styled.img``;
 
 const IncrementForm = styled.form`
+    flex-grow: 1;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 4px;
+    align-content: end;
     margin-top: 16px;
 `;
 

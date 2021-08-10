@@ -8,6 +8,7 @@ import {COLORS} from './constants';
 import OverviewCard from './components/OverviewCard';
 import TerraformRating from './components/TerraformRating';
 import SupplyCard from './components/SupplyCard';
+import ProductionStepper from './components/ProductionStepper';
 
 //import icons
 import mcIcon from './icons/mc-icon.svg';
@@ -44,8 +45,8 @@ function App() {
     }
     
     const incrementMcProd = (amount) => {
-        setMcProd(mcProd + amount);
-        addToLog('MegaCredit production ' + (amount<0?"":"+") + amount);
+        setMcProd(amount);
+        addToLog('MegaCredit production: ' + amount);
     }
 
     //================ STEEL ================
@@ -59,8 +60,8 @@ function App() {
     }
     
     const incrementSteelProd = (amount) => {
-        setSteelProd(steelProd + amount);
-        addToLog('Steel production ' + (amount<0?"":"+") + amount);
+        setSteelProd(amount);
+        addToLog('Steel production: ' + amount);
     }
 
     //================ TITANIUM ================
@@ -74,8 +75,8 @@ function App() {
     }
     
     const incrementTitaniumProd = (amount) => {
-        setTitaniumProd(titaniumProd + amount);
-        addToLog('Titanium production' + (amount<0?"":"+") + amount);
+        setTitaniumProd(amount);
+        addToLog('Titanium production: ' + amount);
     }
 
     //================ PLANTS ================
@@ -89,8 +90,8 @@ function App() {
     }
     
     const incrementPlantProd = (amount) => {
-        setPlantProd(plantProd + amount);
-        addToLog('Plant production ' + (amount<0?"":"+") + amount);
+        setPlantProd(amount);
+        addToLog('Plant production: ' + amount);
     }
 
     //================ ENERGY ================
@@ -104,8 +105,8 @@ function App() {
     }
     
     const incrementEnergyProd = (amount) => {
-        setEnergyProd(energyProd + amount);
-        addToLog('Energy production ' + (amount<0?"":"+") + amount);
+        setEnergyProd(amount);
+        addToLog('Energy production: ' + amount);
     }
 
     //================ HEAT ================
@@ -119,8 +120,8 @@ function App() {
     }
     
     const incrementHeatProd = (amount) => {
-        setHeatProd(heatProd + amount);
-        addToLog('Heat production' + (amount<0?"":"+") + amount);
+        setHeatProd(amount);
+        addToLog('Heat production: ' + amount);
     }
     
     //================ ACTIONS ================
@@ -180,89 +181,103 @@ function App() {
     return (
         <MainWrapper className="App">
             <MaxWidthWrapper>
-                <OverviewGrid>
-                    <TerraformRatingWrapper>
-                        <TerraformRating
-                            tr={tr}
-                        />
-                    </TerraformRatingWrapper>
-                    <OverviewCard
-                        title='Mega Credits'
-                        supply={mcAvailable}
-                        production={mcProd}
-                        icon={mcIcon}
+                <TerraformRatingWrapper>
+                    <TerraformRating
+                        tr={tr}
                     />
-                    <OverviewCard
-                        title='Steel'
-                        supply={steelAvailable}
-                        production={steelProd}
-                        icon={steelIcon}
-                    />
-                    <OverviewCard
-                        title='Titanium'
-                        supply={titaniumAvailable}
-                        production={titaniumProd}
-                        icon={titaniumIcon}
-                    />
-                    <OverviewCard
-                        title='Plants'
-                        supply={plantsAvailable}
-                        production={plantProd}
-                        icon={plantsIcon}
-                    />
-                    <OverviewCard
-                        title='Energy'
-                        supply={energyAvailable}
-                        production={energyProd}
-                        icon={energyIcon}
-                    />
-                    <OverviewCard
-                        title='Heat'
-                        supply={heatAvailable}
-                        production={heatProd}
-                        icon={heatIcon}
-                    />
-                </OverviewGrid>
+                </TerraformRatingWrapper>
+                <SectionSpacer />
                 <SupplyGrid>
                     <Heading>Supply</Heading>
                     <SupplyCard 
-                        resource='MC'
+                        title='Mega Credits'
                         supply={mcAvailable}
                         icon={mcIcon}
                         increment={incrementMC}
                     />
                     <SupplyCard 
-                        resource='Steel'
+                        title='Steel'
                         supply={steelAvailable}
                         icon={steelIcon}
                         increment={incrementSteel}
                     />
                     <SupplyCard 
-                        resource='Titanium'
+                        title='Titanium'
                         supply={titaniumAvailable}
                         icon={titaniumIcon}
                         increment={incrementTitanium}
                     />
                     <SupplyCard 
-                        resource='Plants'
+                        title='Plants'
                         supply={plantsAvailable}
                         icon={plantsIcon}
                         increment={incrementPlants}
                     />
                     <SupplyCard 
-                        resource='Energy'
+                        title='Energy'
                         supply={energyAvailable}
                         icon={energyIcon}
                         increment={incrementEnergy}
                     />
                     <SupplyCard 
-                        resource='Heat'
+                        title='Heat'
                         supply={heatAvailable}
                         icon={heatIcon}
                         increment={incrementHeat}
                     />
                 </SupplyGrid>
+                <SectionSpacer />
+                <ProductionWrapper>
+                    <Heading>Production</Heading>
+                    <ProductionStepper
+                        icon={mcIcon}
+                        min={-5}
+                        production={mcProd}
+                        increment={incrementMcProd}
+                    />
+                    <ProductionStepper
+                        icon={steelIcon}
+                        min={0}
+                        production={steelProd}
+                        increment={incrementSteelProd}
+                    />
+                    <ProductionStepper
+                        icon={titaniumIcon}
+                        min={0}
+                        production={titaniumProd}
+                        increment={incrementTitaniumProd}
+                    />
+                    <ProductionStepper
+                        icon={plantsIcon}
+                        min={0}
+                        production={plantProd}
+                        increment={incrementPlantProd}
+                    />
+                    <ProductionStepper
+                        icon={energyIcon}
+                        min={0}
+                        production={energyProd}
+                        increment={incrementEnergyProd}
+                    />
+                    <ProductionStepper
+                        icon={heatIcon}
+                        min={0}
+                        production={heatProd}
+                        increment={incrementHeatProd}
+                    />
+                </ProductionWrapper>
             </MaxWidthWrapper>
+            <ProduceWrapper>
+                {
+                    showProductionChoice ?
+                    <>
+                        <ProduceButton onClick={() => produce()}>Produce</ProduceButton>
+                        <CancelProduceButton onClick={() => toggleProductionChoice()}>Cancel</CancelProduceButton>
+                    </>
+                    :
+                    <ProduceButton onClick={() => toggleProductionChoice()}>Produce</ProduceButton>
+                }
+            </ProduceWrapper>
         </MainWrapper>
     );
 }
@@ -271,6 +286,7 @@ const MainWrapper = styled.main`
     min-height: 100%;
     padding: 16px;
     background-color: ${COLORS.background};
+    position: relative;
 `;
 
 const MaxWidthWrapper = styled.div`
@@ -278,15 +294,8 @@ const MaxWidthWrapper = styled.div`
     margin: 0 auto;
 `;
 
-const OverviewGrid = styled.section`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-
-`;
-
 const TerraformRatingWrapper = styled.div`
-    grid-column: 1 / -1;
+    
 `;
 
 const SupplyGrid = styled.div`
@@ -297,6 +306,43 @@ const SupplyGrid = styled.div`
 
 const Heading = styled.h2`
     grid-column: 1 / -1;
+`;
+
+const ProductionWrapper = styled.div``;
+
+const ProduceWrapper = styled.div`
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    left: 32px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+`;
+
+const ProduceButton = styled.button`
+    background-color: ${COLORS.mainBlue};
+    border: none;
+    min-height: 50px;
+    min-width: 150px;
+    border-radius: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+`;
+
+const CancelProduceButton = styled(ProduceButton)`
+    background-color: transparent;
+    color: ${COLORS.error};
+    border: 1px solid ${COLORS.error};
+`;
+
+const SectionSpacer = styled.div`
+    height: 32px;
 `;
 
 export default App;
