@@ -1,4 +1,11 @@
 const COLORS = {
+    background: '#082032',
+    mainBlue: 'hsl(215, 100%, 68%)',
+    error: 'hsl(10, 100%, 58%)',
+    cardBK: 'hsl(215, 26%, 23%, .9)',
+    bronze: '#BC630F',
+    silver: '#A5A5A5',
+    gold: '#FFB80E',
     primary: {
         main: '#C24914',
     },
