@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
 
 import {COLORS} from '../constants';
@@ -8,37 +8,17 @@ import arrowLeft from '../icons/chevron_left.svg';
 
 const ProductionStepper = ({icon, increment, production, min}) => {
     const [minRange, setMinRange] = useState(0);
-    const [maxRange, setMaxRange] = useState(window.innerWidth < 1000 ? 5 : 10);
-    const [range, setRange] = useState(window.innerWidth < 1000 ? 5 : 10);
+    const [maxRange, setMaxRange] = useState(5);
 
-    useEffect(() => {
-        const handleWindowResize = () => {
-            const windowWidth = window.innerWidth;
-            
-            if (windowWidth < 1000){
-                setMinRange(0);
-                setMaxRange(5)
-                setRange(5);
-            }else {
-                setMinRange(0);
-                setMaxRange(10)
-                setRange(10);
-            }
-        }
-
-        window.addEventListener("resize", handleWindowResize);
-
-        return () => window.removeEventListener("resize", handleWindowResize)
-    }, []);
 
     const pageUp = () => {
-        setMinRange(minRange + range);
-        setMaxRange(maxRange + range);
+        setMinRange(minRange + 5);
+        setMaxRange(maxRange + 5);
     }
 
     const pageDown = () => {
-        setMinRange(minRange - range);
-        setMaxRange(maxRange - range);
+        setMinRange(minRange - 5);
+        setMaxRange(maxRange - 5);
     }
 
     let currentRange = [];

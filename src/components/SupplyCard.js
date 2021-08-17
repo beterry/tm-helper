@@ -189,10 +189,9 @@ const Wrapper = styled.div`
     background-color: ${COLORS.cardBK};
     border-radius: 8px;
     padding: 16px;
+    padding-bottom: 32px;
     position: relative;
     min-height: 200px;
-    display: flex;
-    flex-direction: column;
 `;
 
 const Title = styled.h2`
@@ -244,13 +243,14 @@ const AddButton = styled(IconButton)`
 const AddIcon = styled.img``;
 
 const IncrementForm = styled.form`
-    flex-grow: 1;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 4px;
     align-content: end;
-    margin-top: 16px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
 `;
 
 const IncrementInput = styled.input`
@@ -282,9 +282,8 @@ const CancelButton = styled(IncrementButton)`
 `;
 
 const CubeWrapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 40px);
     gap: 8px;
     margin-top: 16px;
 `;

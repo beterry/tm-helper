@@ -285,6 +285,7 @@ function App() {
                         </ProductionWrapper>
                         <SectionSpacer size='32px'/>
                         <Heading>Log</Heading>
+                        <SectionSpacer size='16px'/>
                         <LogWrapper>
                             {log.map((action, i) => <Action key={i}>{action}</Action>)}
                         </LogWrapper>
@@ -364,7 +365,7 @@ const MainGrid = styled.div`
     gap: 32px;
 
     @media screen and (min-width: 786px){
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 5fr 2fr;
     }
 `;
 
@@ -373,7 +374,7 @@ const RightWrapper = styled.div`
 `;
 
 const LogWrapper = styled.div`
-    height: 300px;
+    height: 200px;
     overflow-y: auto;
 `;
 
@@ -382,7 +383,7 @@ const Action = styled.p`
     opacity: .5;
 
     &:first-of-type{
-        margin-top: 16px;
+        margin-top: 0;
     }
 `;
 
@@ -394,8 +395,9 @@ const SupplyWrapper = styled.div`
 
 const SupplyGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 16px;
+    overflow-y: auto;
 `;
 
 const Heading = styled.h2`
