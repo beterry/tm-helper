@@ -12,6 +12,9 @@ const SupplyCard = ({
     supply,
     increment,
     icon,
+    showProduction,
+    production,
+    conversion = {},
 }) => {
     const [incrementBy, setIncrementBy] = useState(0);
     const [showForm, setShowForm] = useState(false);
@@ -133,8 +136,11 @@ const SupplyCard = ({
             <Header>
                 <Icon src={icon} alt=''/>
                 <Supply>{supply}</Supply>
-                {showForm &&
+                {(showForm && !showProduction) &&
                     <AfterIncrement>{supply + incrementBy}</AfterIncrement>
+                }
+                {(showProduction && production !== 0) &&
+                    <AfterIncrement>{production > 0 && "+"}{production}</AfterIncrement>
                 }
             </Header>
             {supply > 0 && 
@@ -218,18 +224,21 @@ const Icon = styled.img`
     margin-right: 8px;
 `;
 
-const AddButton = styled.button`
-    position: absolute;
-    top: 16px;
-    right: 16px;
+const IconButton = styled.button`
     background-color: transparent;
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     border: none;
+`;
+
+const AddButton = styled(IconButton)`
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
 `;
 
 const AddIcon = styled.img``;
