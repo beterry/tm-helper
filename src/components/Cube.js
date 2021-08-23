@@ -1,10 +1,18 @@
+import {useState} from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../constants';
 
-const Cube = ({color, step, touch, isTouched, id}) => {
+const Cube = ({color, step, action}) => {
+    const [isTouched, setIsTouched] = useState(false);
+
     const handleTouch = (e) => {
         e.preventDefault();
-        touch(id, isTouched ? -step : step);
+
+        //activate action
+        action(isTouched ? step : -step);
+
+        //toggle opacity
+        setIsTouched(!isTouched);
     }
 
     return (

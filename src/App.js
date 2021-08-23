@@ -412,10 +412,9 @@ const ProductionWrapper = styled.div`
 const ProduceWrapper = styled.div`
     position: fixed;
     bottom: 32px;
-    right: 32px;
+    right: 24px;
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
 `;
 
 const ProduceButton = styled.button`
@@ -431,12 +430,12 @@ const ProduceButton = styled.button`
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: .7px;
+    margin: 0 8px;
 `;
 
 const CancelProduceButton = styled(ProduceButton)`
-    background-color: transparent;
-    color: ${COLORS.error};
-    border: 1px solid ${COLORS.error};
+    background-color: ${COLORS.error};
+    color: white;
 `;
 
 const SectionSpacer = styled.div`

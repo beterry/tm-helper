@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
 
 import {COLORS} from '../constants';
@@ -14,14 +14,14 @@ const SupplyCard = ({
     icon,
     showProduction,
     production,
-    conversion = {},
 }) => {
     const [incrementBy, setIncrementBy] = useState(0);
     const [showForm, setShowForm] = useState(false);
-    const [cubes, setCubes] = useState([]);
+    const [forceReset, setForceReset] = useState(1);
 
     const submitIncrement = (e) => {
         e.preventDefault();
+        resetCubes();
         increment(supply + incrementBy < 0 ? supply * -1 : incrementBy);
         setIncrementBy(0);
         setShowForm(false);
@@ -29,8 +29,6 @@ const SupplyCard = ({
 
     const handleTapAdd = (e) => {
         e.preventDefault();
-
-        resetCubes();
 
         if (incrementBy >= 0){
             //if we are in the process of adding
@@ -41,94 +39,92 @@ const SupplyCard = ({
         }
 
         setShowForm(true);
+        resetCubes();
     }
 
     const handleTapCancel = (e) => {
         e.preventDefault();
-
-        resetCubes();
-
         setIncrementBy(0);
         setShowForm(false);
+        resetCubes();
     }
 
-    const handleCubeTouch = (i, step) => {
-        
-        let touchedCube = cubes[i];
-        let newCubes = [...cubes];
-
-        //toggle the opacity of the touched cube
-        touchedCube.isTouched = !touchedCube.isTouched;
-        //replace existing cube with the new one
-        newCubes.splice(i, 1, touchedCube);
-
-        if (incrementBy > 0){
-            //if we are transitioning from adding to subtracting
-            setIncrementBy(- step);
-        } else {
-            //if we are in process of subtracting
-            setIncrementBy(incrementBy - step);
-        }
-        
-        setCubes(newCubes);
+    const handleCubeTouch = (step) => {
+        setIncrementBy(incrementBy + step);
         setShowForm(true);
     }
-
+    
     const resetCubes = () => {
-        let newCubes = [...cubes];
-        newCubes.forEach(cube => {
-            cube.isTouched = false;
-        })
+        setForceReset(forceReset + 1);
+     }
+
+    let bronze = supply;
+    let silver = 0;
+    let gold = 0;
+
+    if (supply >= 10){
+        silver = 1;
+        bronze = supply - 5;
     }
 
-    useEffect(() => {
-        let bronze = supply;
-        let silver = 0;
-        let gold = 0;
+    if (supply >= 15){
+        silver = 2;
+        bronze = supply - 10;
+    }
 
-        if (supply >= 10){
-            silver = 1;
-            bronze = supply - 5;
-        }
+    if (supply > 20){
+        silver = 2;
+        bronze = supply - 10;
+    }
 
-        if (supply >= 15){
-            silver = 2;
-            bronze = supply - 10;
-        }
+    if (supply > 25){
+        gold = 1;
+        silver = 2;
+        bronze = supply - 20;
+    }
 
-        if (supply > 20){
-            silver = 2;
-            bronze = supply - 10;
-        }
+    if (supply > 30){
+        gold = Math.floor((supply - 15) / 10)
+        silver = 2;
+        bronze = supply - (gold * 10) - 10;
+    }
 
-        if (supply > 25){
-            gold = 1;
-            silver = 2;
-            bronze = supply - 20;
-        }
+    //build cubes
+    let bronzeCubes = [];
+    for (let i = 0; i < bronze; i++){
+        bronzeCubes.push(
+            <Cube
+                key={`bronze ${i} ${forceReset}`}
+                color='bronze'
+                step={1}
+                action={handleCubeTouch}
+            />
+        );
+    };
 
-        if (supply > 30){
-            gold = Math.floor((supply - 15) / 10)
-            silver = 2;
-            bronze = supply - (gold * 10) - 10;
-        }
+    let silverCubes = [];
+    for (let i = 0; i < silver; i++){
+        silverCubes.push(
+            <Cube
+                key={`silver ${i} ${forceReset}`}
+                color='silver'
+                step={5}
+                action={handleCubeTouch}
+            />
+        );
+    };
 
-        //build cubes
-        let buildCubes = [];
-        for (let i = 0; i < bronze; i++){
-            buildCubes.push({step: 1, color: 'bronze', isTouched: false});
-        };
-
-        for (let i = 0; i < silver; i++){
-            buildCubes.push({step: 5, color: 'silver', isTouched: false});
-        };
-
-        for (let i = 0; i < gold; i++){
-            buildCubes.push({step: 10, color: 'gold', isTouched: false});
-        };
-
-        setCubes(buildCubes);
-    }, [supply])
+    let goldCubes = [];
+    for (let i = 0; i < gold; i++){
+        goldCubes.push(
+            <Cube
+                key={`gold ${i} ${forceReset}`}
+                color='gold'
+                step={10}
+                action={handleCubeTouch}
+            />
+        );
+    };
 
     return (
         <Wrapper>
@@ -145,16 +141,9 @@ const SupplyCard = ({
             </Header>
             {supply > 0 && 
                 <CubeWrapper>
-                    {cubes.map((cube, i) => 
-                        <Cube 
-                            id={i}
-                            key={i}
-                            step={cube.step}
-                            color={cube.color}
-                            touch={handleCubeTouch}
-                            isTouched={cube.isTouched}
-                        />
-                    )}
+                    {bronzeCubes}
+                    {silverCubes}
+                    {goldCubes}
                 </CubeWrapper>
             }
             <FlexFill />
@@ -248,7 +237,7 @@ const IncrementForm = styled.form`
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 4px;
+    gap: 16px;
     align-content: end;
     margin-top: 16px;
 `;
@@ -266,19 +255,21 @@ const IncrementInput = styled.input`
 `;
 
 const IncrementButton = styled.button`
-    background-color: transparent;
+    border-radius: 4px;
     border: none;
-    padding: 4px 16px;
+    padding: 4px 8px;
     text-transform: uppercase;
     letter-spacing: .7px;
 `;
 
 const SubmitButton = styled(IncrementButton)`
-    color: ${COLORS.mainBlue};
+    background-color: ${COLORS.mainBlue};
+    color: white;
 `;
 
 const CancelButton = styled(IncrementButton)`
     color: ${COLORS.error};
+    background-color: transparent;
 `;
 
 const CubeWrapper = styled.div`
