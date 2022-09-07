@@ -1,11 +1,14 @@
-import {useState} from 'react';
-import styled from 'styled-components';
+import {useState} from 'react'
+import styled from 'styled-components'
 
-import {COLORS} from '../constants';
+// constants
+import {COLORS} from '../constants'
 
-import Cube from './Cube';
+// components
+import Cube from './Cube'
 
-import addIcon from '../icons/add-icon.svg';
+// images
+import addIcon from '../icons/add-icon.svg'
 
 const SupplyCard = ({
     title,
@@ -15,82 +18,113 @@ const SupplyCard = ({
     showProduction,
     production,
 }) => {
-    const [incrementBy, setIncrementBy] = useState(0);
-    const [showForm, setShowForm] = useState(false);
-    const [forceReset, setForceReset] = useState(1);
+    const [incrementBy, setIncrementBy] = useState(0)
+    const [showForm, setShowForm] = useState(false)
+
+    // this is used to force a component rerender
+    const [forceReset, setForceReset] = useState(1)
 
     const submitIncrement = (e) => {
-        e.preventDefault();
-        resetCubes();
-        increment(supply + incrementBy < 0 ? supply * -1 : incrementBy);
-        setIncrementBy(0);
-        setShowForm(false);
+        e.preventDefault()
+
+        // clear state on all cubes so new cubes are not touched
+        resetCubes()
+
+        // invoke increment function
+        // don't allow supply to be less than 0
+        increment(supply + incrementBy < 0 ? supply * -1 : incrementBy)
+
+        // reset increment
+        setIncrementBy(0)
+
+        // hide form
+        setShowForm(false)
     }
 
     const handleTapAdd = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (incrementBy >= 0){
-            //if we are in the process of adding
-            setIncrementBy(incrementBy + 1);
-        }else {
-            //if we are transitioning from subtracting to adding
-            setIncrementBy(1);
+            // if we are in the process of adding
+            setIncrementBy(incrementBy + 1)
+        } else {
+            // if we are transitioning from subtracting to adding
+            setIncrementBy(1)
         }
 
-        setShowForm(true);
-        resetCubes();
+        // show the form
+        setShowForm(true)
+
+        // make sure all cubes are solid
+        resetCubes()
     }
 
     const handleTapCancel = (e) => {
-        e.preventDefault();
-        setIncrementBy(0);
-        setShowForm(false);
-        resetCubes();
+        e.preventDefault()
+
+        // hide and reset form
+        setIncrementBy(0)
+        setShowForm(false)
+
+        // make sure all cubes are solid
+        resetCubes()
     }
 
     const handleCubeTouch = (step) => {
-        setIncrementBy(incrementBy + step);
-        setShowForm(true);
+        // add or subtract from running increment total
+        setIncrementBy(incrementBy + step)
+
+        // show the form
+        setShowForm(true)
     }
     
+    // this function simply increments the forceReset state
+    // this resets all cubes, making sure they don't incorrectly hold state
+    // we use this function to return all cubes to solid
     const resetCubes = () => {
-        setForceReset(forceReset + 1);
+        setForceReset(forceReset + 1)
      }
 
-    let bronze = supply;
-    let silver = 0;
-    let gold = 0;
+    // THESE ARE THE CUBE VALUES
+    // bronze -- 1
+    // silver -- 5
+    // gold -- 10
 
+    // we start by making the entire supply bronze cubes
+    let bronze = supply
+    let silver = 0
+    let gold = 0
+
+    // we then use these break points to convert bronze cubes to silver and gold
     if (supply >= 10){
-        silver = 1;
-        bronze = supply - 5;
+        silver = 1
+        bronze = supply - 5
     }
 
     if (supply >= 15){
-        silver = 2;
-        bronze = supply - 10;
+        silver = 2
+        bronze = supply - 10
     }
 
     if (supply > 20){
-        silver = 2;
-        bronze = supply - 10;
+        silver = 2
+        bronze = supply - 10
     }
 
     if (supply > 25){
-        gold = 1;
-        silver = 2;
-        bronze = supply - 20;
+        gold = 1
+        silver = 2
+        bronze = supply - 20
     }
 
     if (supply > 30){
         gold = Math.floor((supply - 15) / 10)
-        silver = 2;
-        bronze = supply - (gold * 10) - 10;
+        silver = 2
+        bronze = supply - (gold * 10) - 10
     }
 
-    //build cubes
-    let bronzeCubes = [];
+    // build bronze cube array
+    let bronzeCubes = []
     for (let i = 0; i < bronze; i++){
         bronzeCubes.push(
             <Cube
@@ -99,10 +133,11 @@ const SupplyCard = ({
                 step={1}
                 action={handleCubeTouch}
             />
-        );
-    };
+        )
+    }
 
-    let silverCubes = [];
+    // build silver cube array
+    let silverCubes = []
     for (let i = 0; i < silver; i++){
         silverCubes.push(
             <Cube
@@ -111,10 +146,11 @@ const SupplyCard = ({
                 step={5}
                 action={handleCubeTouch}
             />
-        );
-    };
+        )
+    }
 
-    let goldCubes = [];
+    // build gold cube array
+    let goldCubes = []
     for (let i = 0; i < gold; i++){
         goldCubes.push(
             <Cube
@@ -123,12 +159,14 @@ const SupplyCard = ({
                 step={10}
                 action={handleCubeTouch}
             />
-        );
-    };
+        )
+    }
 
     return (
-        <Wrapper>
+        <Card>
             <Title>{title}</Title>
+
+            {/* Icon and count */}
             <Header>
                 <Icon src={icon} alt=''/>
                 <Supply>{supply}</Supply>
@@ -139,6 +177,8 @@ const SupplyCard = ({
                     <AfterIncrement>{production > 0 && "+"}{production}</AfterIncrement>
                 }
             </Header>
+
+            {/* CUBES */}
             {supply > 0 && 
                 <CubeWrapper>
                     {bronzeCubes}
@@ -146,7 +186,10 @@ const SupplyCard = ({
                     {goldCubes}
                 </CubeWrapper>
             }
-            <FlexFill />
+
+            <Spacer />
+
+            {/* FORM */}
             {showForm &&
                 <IncrementForm>
                     <IncrementInput
@@ -166,16 +209,18 @@ const SupplyCard = ({
                     </CancelButton>
                 </IncrementForm>
             }
+
+            {/* ADD BUTTON - TOP RIGHT */}
             <AddButton
                 onClick={(e) => handleTapAdd(e)}
             >
                 <AddIcon src={addIcon} alt='Add'/>
             </AddButton>
-        </Wrapper>
+        </Card>
     )
 }
 
-const Wrapper = styled.div`
+const Card = styled.div`
     background-color: ${COLORS.cardBK};
     border-radius: 8px;
     padding: 16px;
@@ -183,7 +228,7 @@ const Wrapper = styled.div`
     min-height: 200px;
     display: flex;
     flex-direction: column;
-`;
+`
 
 const Title = styled.h2`
     font-size: .875rem;
@@ -191,28 +236,28 @@ const Title = styled.h2`
     letter-spacing: .7px;
     font-weight: 400;
     margin-bottom: 8px;
-`;
+`
 
 const Header = styled.div`
     display: flex;
     align-items: center;
-`;
+`
 
 const Supply = styled.h3`
     font-size: 2rem;
     font-weight: 700;
     margin-right: 8px;
-`;
+`
 
 const AfterIncrement = styled.p`
     font-size: 1rem;
     opacity: .5;
 
-`;
+`
 
 const Icon = styled.img`
     margin-right: 8px;
-`;
+`
 
 const IconButton = styled.button`
     background-color: transparent;
@@ -221,7 +266,7 @@ const IconButton = styled.button`
     justify-content: center;
     align-items: center;
     border: none;
-`;
+`
 
 const AddButton = styled(IconButton)`
     position: absolute;
@@ -229,7 +274,7 @@ const AddButton = styled(IconButton)`
     right: 16px;
     width: 40px;
     height: 40px;
-`;
+`
 
 const AddIcon = styled.img``;
 
@@ -240,7 +285,7 @@ const IncrementForm = styled.form`
     gap: 16px;
     align-content: end;
     margin-top: 16px;
-`;
+`
 
 const IncrementInput = styled.input`
     display: block;
@@ -252,7 +297,7 @@ const IncrementInput = styled.input`
     color: white;
     flex: 1;
     font-size: 1.25rem;
-`;
+`
 
 const IncrementButton = styled.button`
     border-radius: 4px;
@@ -260,27 +305,27 @@ const IncrementButton = styled.button`
     padding: 4px 8px;
     text-transform: uppercase;
     letter-spacing: .7px;
-`;
+`
 
 const SubmitButton = styled(IncrementButton)`
     background-color: ${COLORS.mainBlue};
     color: white;
-`;
+`
 
 const CancelButton = styled(IncrementButton)`
     color: ${COLORS.error};
     background-color: transparent;
-`;
+`
 
 const CubeWrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, 40px);
     gap: 8px;
     margin-top: 16px;
-`;
+`
 
-const FlexFill = styled.div`
+const Spacer = styled.div`
     flex-grow: 1;
-`;
+`
 
-export default SupplyCard;
+export default SupplyCard

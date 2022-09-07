@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-//import icons
-import addIcon from '../icons/add_circle.svg';
-import minusIcon from '../icons/remove_circle.svg';
+// icons
+import addIcon from '../icons/add_circle.svg'
+import minusIcon from '../icons/remove_circle.svg'
 
 const TerraformRating = ({tr, increment}) => {
     return (
@@ -35,21 +35,21 @@ const Wrapper = styled.div`
     @media screen and (min-width: 600px){
         align-items: flex-start;
     }
-`;
+`
 
 const Title = styled.h1`
     margin-bottom: 8px;
-`;
+`
 
 const Rating = styled.h2`
     font-size: 4rem;
     margin: 0 16px;
-`;
+`
 
 const RatingWrapper = styled.div`
     display: flex;
     align-items: center;
-`;
+`
 
 const IncrementButton = styled.button`
     background-color: transparent;
@@ -59,8 +59,9 @@ const IncrementButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;`;
+    border: none;
+`
 
-const Icon = styled.img``;
+const Icon = styled.img``
 
-export default TerraformRating;
+export default TerraformRating

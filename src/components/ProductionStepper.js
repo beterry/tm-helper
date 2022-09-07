@@ -1,29 +1,37 @@
-import {useState} from 'react';
-import styled from 'styled-components';
+import { useState } from 'react'
+import styled from 'styled-components'
 
-import {COLORS} from '../constants';
+// constants
+import {COLORS} from '../constants'
 
-import arrowRight from '../icons/chevron_right.svg';
-import arrowLeft from '../icons/chevron_left.svg';
+// images
+import arrowRight from '../icons/chevron_right.svg'
+import arrowLeft from '../icons/chevron_left.svg'
 
 const ProductionStepper = ({icon, increment, production, min}) => {
-    const [minRange, setMinRange] = useState(0);
-    const [maxRange, setMaxRange] = useState(5);
+    // number of steps in the stepper
+    const range = 5
 
+    // tracks the lowest number in the range
+    const [minRange, setMinRange] = useState(0)
+
+    // tracks largest number in the range
+    const [maxRange, setMaxRange] = useState(range)
 
     const pageUp = () => {
-        setMinRange(minRange + 5);
-        setMaxRange(maxRange + 5);
+        setMinRange(minRange + range)
+        setMaxRange(maxRange + range)
     }
 
     const pageDown = () => {
-        setMinRange(minRange - 5);
-        setMaxRange(maxRange - 5);
+        setMinRange(minRange - range)
+        setMaxRange(maxRange - range)
     }
 
-    let currentRange = [];
+    // use component state to compose array of steps
+    let currentRange = []
     for (let i = minRange; i < maxRange; i++){
-        currentRange.push(i);
+        currentRange.push(i)
     }
 
     return (
@@ -64,15 +72,15 @@ const Wrapper = styled.div`
     &:nth-child(odd){
         background-color: ${COLORS.cardBK};
     }
-`;
+`
 
 const IconWrapper = styled.div`
     line-height: 1;
-`;
+`
 
 const Icon = styled.img`
     display: block;
-`;
+`
 
 const ProductionButton = styled.button`
     width: 40px;
@@ -88,8 +96,8 @@ const ProductionButton = styled.button`
     &:disabled{
         opacity: .3;
     }
-`;
+`
 
-const PageButton = styled(ProductionButton)``;
+const PageButton = styled(ProductionButton)``
 
-export default ProductionStepper;
+export default ProductionStepper
