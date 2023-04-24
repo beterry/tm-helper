@@ -1,15 +1,18 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
-// constants
+// CONSTANTS
 import {COLORS} from './constants'
 
-// components
+// COMPONENTS
 import TerraformRating from './components/TerraformRating'
 import SupplyCard from './components/SupplyCard'
 import ProductionStepper from './components/ProductionStepper'
 
-// icons
+// CONTEXT
+import { LogContext } from './providers/log-provider'
+
+// ICONS
 import mcIcon from './icons/mc-icon.svg'
 import steelIcon from './icons/steel-icon.svg'
 import titaniumIcon from './icons/titanium-icon.svg'
@@ -19,8 +22,14 @@ import heatIcon from './icons/heat-icon.svg'
 import forestTile from './icons/tile_forest.svg'
 import tempTile from './icons/tile_temp.svg'
 import oceanTile from './icons/tile_ocean.svg'
+import ActionLog from './components/ActionLog'
 
 function App() {
+
+    //=============================================
+    // CONTEXT
+    //=============================================
+    const { addToLog } = React.useContext(LogContext)
 
     //=============================================
     // TR
@@ -166,16 +175,9 @@ function App() {
     // MISC STATE
     //=============================================
     const [showProductionChoice, setShowProductionChoice] = useState(false)
-    const [log, setLog] = useState([])
 
     const toggleProductionChoice = () => {
         setShowProductionChoice(!showProductionChoice)
-    }
-
-    // add an action to the log state
-    const addToLog = (action) => {
-        // insert new action into the front of current state
-        setLog(prevLog => [action, ...prevLog.slice(0, 24)])
     }
 
     //=============================================
@@ -312,14 +314,7 @@ function App() {
 
                         <SectionSpacer size='32px'/>
 
-                        <Heading>Log</Heading>
-
-                        <SectionSpacer size='16px'/>
-
-                        {/* LOG ACTIONS */}
-                        <LogWrapper>
-                            {log.map((action, i) => <Action key={i}>{action}</Action>)}
-                        </LogWrapper>
+                        <ActionLog />
                     </RightWrapper>
                 </MainGrid>
             </MaxWidthWrapper>
@@ -403,20 +398,6 @@ const MainGrid = styled.div`
 `
 
 const RightWrapper = styled.div``
-
-const LogWrapper = styled.div`
-    height: 200px;
-    overflow-y: auto;
-`
-
-const Action = styled.p`
-    margin-top: 8px;
-    opacity: .5;
-
-    &:first-of-type{
-        margin-top: 0;
-    }
-`
 
 const SupplyWrapper = styled.div`
     display: grid;
