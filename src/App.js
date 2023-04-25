@@ -6,7 +6,6 @@ import {COLORS} from './constants'
 
 // COMPONENTS
 import TerraformRating from './components/TerraformRating'
-import ProductionStepper from './components/ProductionStepper'
 import Supply from './components/Supply'
 import ActionLog from './components/ActionLog'
 
@@ -14,15 +13,10 @@ import ActionLog from './components/ActionLog'
 import { LogContext } from './providers/log-provider'
 
 // ICONS
-import mcIcon from './icons/mc-icon.svg'
-import steelIcon from './icons/steel-icon.svg'
-import titaniumIcon from './icons/titanium-icon.svg'
-import plantsIcon from './icons/plants-icon.svg'
-import energyIcon from './icons/energy-icon.svg'
-import heatIcon from './icons/heat-icon.svg'
 import forestTile from './icons/tile_forest.svg'
 import tempTile from './icons/tile_temp.svg'
 import oceanTile from './icons/tile_ocean.svg'
+import Production from './components/Production'
 
 function App() {
 
@@ -46,66 +40,36 @@ function App() {
     //=============================================
     const [mcAvailable, setMcAvailable] = useState(0)
     const [mcProd, setMcProd] = useState(0)
-    
-    const incrementMcProd = (amount) => {
-        setMcProd(amount)
-        addToLog('MegaCredit production: ' + amount)
-    }
 
     //=============================================
     // STEEL
     //=============================================
     const [steelAvailable, setSteelAvailable] = useState(0)
     const [steelProd, setSteelProd] = useState(0)
-    
-    const incrementSteelProd = (amount) => {
-        setSteelProd(amount)
-        addToLog('Steel production: ' + amount)
-    }
 
     //=============================================
     // TITANIUM
     //=============================================
     const [titaniumAvailable, setTitaniumAvailable] = useState(0)
     const [titaniumProd, setTitaniumProd] = useState(0)
-    
-    const incrementTitaniumProd = (amount) => {
-        setTitaniumProd(amount)
-        addToLog('Titanium production: ' + amount)
-    }
 
     //=============================================
     // PLANTS
     //=============================================
     const [plantsAvailable, setPlantsAvailable] = useState(0)
     const [plantProd, setPlantProd] = useState(0)
-    
-    const incrementPlantProd = (amount) => {
-        setPlantProd(amount)
-        addToLog('Plant production: ' + amount)
-    }
 
     //=============================================
     // ENERGY
     //=============================================
     const [energyAvailable, setEnergyAvailable] = useState(0)
     const [energyProd, setEnergyProd] = useState(0)
-    
-    const incrementEnergyProd = (amount) => {
-        setEnergyProd(amount)
-        addToLog('Energy production: ' + amount)
-    }
 
     //=============================================
     // HEAT
     //=============================================
     const [heatAvailable, setHeatAvailable] = useState(0)
     const [heatProd, setHeatProd] = useState(0)
-
-    const incrementHeatProd = (amount) => {
-        setHeatProd(amount)
-        addToLog('Heat production: ' + amount)
-    }
     
     //=============================================
     // ACTIONS
@@ -177,55 +141,17 @@ function App() {
                     </TileWrapper>
                 </TerraformRatingWrapper>
 
-                {/* SUPPLY CARDS */}
                 <MainGrid>
+                    {/* SUPPLY CARDS */}
                     <Supply showProduction={showProductionChoice}/>
 
-                    {/* PRODUCTION STEPPERS */}
                     <RightWrapper>
-                        <Heading>Production</Heading>
-                        <SectionSpacer size='16px'/>
-                        <ProductionWrapper>
-                            <ProductionStepper
-                                icon={mcIcon}
-                                min={-5}
-                                production={mcProd}
-                                increment={incrementMcProd}
-                            />
-                            <ProductionStepper
-                                icon={steelIcon}
-                                min={0}
-                                production={steelProd}
-                                increment={incrementSteelProd}
-                            />
-                            <ProductionStepper
-                                icon={titaniumIcon}
-                                min={0}
-                                production={titaniumProd}
-                                increment={incrementTitaniumProd}
-                            />
-                            <ProductionStepper
-                                icon={plantsIcon}
-                                min={0}
-                                production={plantProd}
-                                increment={incrementPlantProd}
-                            />
-                            <ProductionStepper
-                                icon={energyIcon}
-                                min={0}
-                                production={energyProd}
-                                increment={incrementEnergyProd}
-                            />
-                            <ProductionStepper
-                                icon={heatIcon}
-                                min={0}
-                                production={heatProd}
-                                increment={incrementHeatProd}
-                            />
-                        </ProductionWrapper>
+                        {/* PRODUCTION STEPPERS */}
+                        <Production />
 
                         <SectionSpacer size='32px'/>
 
+                        {/* ACTION LOG */}
                         <ActionLog />
                     </RightWrapper>
                 </MainGrid>
@@ -310,13 +236,6 @@ const MainGrid = styled.div`
 `
 
 const RightWrapper = styled.div``
-
-const Heading = styled.h2``
-
-const ProductionWrapper = styled.div`
-    display: grid;
-    gap: 8px;
-`
 
 const ProduceWrapper = styled.div`
     position: fixed;

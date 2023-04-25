@@ -1,14 +1,24 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
+// CONTEXT
+import { StoreContext } from '../providers/store-provider'
+
 // constants
-import {COLORS} from '../constants'
+import { COLORS } from '../constants'
+import { RESOURCE_NAMES } from '../providers/store-provider'
 
 // images
 import arrowRight from '../icons/chevron_right.svg'
 import arrowLeft from '../icons/chevron_left.svg'
 
-const ProductionStepper = ({icon, increment, production, min}) => {
+const ProductionStepper = ({resource, icon, min = 0}) => {
+
+    // throw error if resource in invalid
+    if (!RESOURCE_NAMES.includes(resource)) {
+        throw new Error(`Invalid resource: ${resource}. Supported resources: ${RESOURCE_NAMES.join(', ')}`)
+    }
+
     // number of steps in the stepper
     const range = 5
 
@@ -17,6 +27,10 @@ const ProductionStepper = ({icon, increment, production, min}) => {
 
     // tracks largest number in the range
     const [maxRange, setMaxRange] = useState(range)
+
+    // get store data from context
+    const { store, adjustProduction } = React.useContext(StoreContext)
+    const production = store[resource].production
 
     const pageUp = () => {
         setMinRange(minRange + range)
@@ -47,7 +61,7 @@ const ProductionStepper = ({icon, increment, production, min}) => {
                 <ProductionButton
                     key={i}
                     active={n === production}
-                    onClick={() => increment(n)}
+                    onClick={() => adjustProduction(resource, n)}
                     disabled={n < min}
                 >
                     {n}
