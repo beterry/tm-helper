@@ -6,8 +6,9 @@ import {COLORS} from './constants'
 
 // COMPONENTS
 import TerraformRating from './components/TerraformRating'
-import SupplyCard from './components/SupplyCard'
 import ProductionStepper from './components/ProductionStepper'
+import Supply from './components/Supply'
+import ActionLog from './components/ActionLog'
 
 // CONTEXT
 import { LogContext } from './providers/log-provider'
@@ -22,7 +23,6 @@ import heatIcon from './icons/heat-icon.svg'
 import forestTile from './icons/tile_forest.svg'
 import tempTile from './icons/tile_temp.svg'
 import oceanTile from './icons/tile_ocean.svg'
-import ActionLog from './components/ActionLog'
 
 function App() {
 
@@ -46,12 +46,6 @@ function App() {
     //=============================================
     const [mcAvailable, setMcAvailable] = useState(0)
     const [mcProd, setMcProd] = useState(0)
-
-    
-    const incrementMC = (amount) => {
-        setMcAvailable(mcAvailable + amount)
-        addToLog('MegaCredits ' + (amount < 0 ? "" : "+") + amount)
-    }
     
     const incrementMcProd = (amount) => {
         setMcProd(amount)
@@ -63,12 +57,6 @@ function App() {
     //=============================================
     const [steelAvailable, setSteelAvailable] = useState(0)
     const [steelProd, setSteelProd] = useState(0)
-
-    
-    const incrementSteel = (amount) => {
-        setSteelAvailable(steelAvailable + amount)
-        addToLog('Steel ' + (amount < 0 ? "" : "+") + amount)
-    }
     
     const incrementSteelProd = (amount) => {
         setSteelProd(amount)
@@ -80,12 +68,6 @@ function App() {
     //=============================================
     const [titaniumAvailable, setTitaniumAvailable] = useState(0)
     const [titaniumProd, setTitaniumProd] = useState(0)
-
-    
-    const incrementTitanium = (amount) => {
-        setTitaniumAvailable(titaniumAvailable + amount)
-        addToLog('Titanium ' + (amount < 0 ? "" : "+") + amount)
-    }
     
     const incrementTitaniumProd = (amount) => {
         setTitaniumProd(amount)
@@ -97,12 +79,6 @@ function App() {
     //=============================================
     const [plantsAvailable, setPlantsAvailable] = useState(0)
     const [plantProd, setPlantProd] = useState(0)
-
-    
-    const incrementPlants = (amount) => {
-        setPlantsAvailable(plantsAvailable + amount)
-        addToLog('Plants ' + (amount < 0 ? "" : "+") + amount)
-    }
     
     const incrementPlantProd = (amount) => {
         setPlantProd(amount)
@@ -114,12 +90,6 @@ function App() {
     //=============================================
     const [energyAvailable, setEnergyAvailable] = useState(0)
     const [energyProd, setEnergyProd] = useState(0)
-
-    
-    const incrementEnergy = (amount) => {
-        setEnergyAvailable(energyAvailable + amount)
-        addToLog('Energy ' + (amount < 0 ? "" : "+") + amount)
-    }
     
     const incrementEnergyProd = (amount) => {
         setEnergyProd(amount)
@@ -132,12 +102,6 @@ function App() {
     const [heatAvailable, setHeatAvailable] = useState(0)
     const [heatProd, setHeatProd] = useState(0)
 
-    
-    const incrementHeat = (amount) => {
-        setHeatAvailable(heatAvailable + amount)
-        addToLog('Heat ' + (amount < 0 ? "" : "+") + amount)
-    }
-    
     const incrementHeatProd = (amount) => {
         setHeatProd(amount)
         addToLog('Heat production: ' + amount)
@@ -215,59 +179,7 @@ function App() {
 
                 {/* SUPPLY CARDS */}
                 <MainGrid>
-                    <SupplyWrapper>
-                        <Heading>Supply</Heading>
-                        <SupplyGrid>
-                            <SupplyCard 
-                                title='Mega Credits'
-                                supply={mcAvailable}
-                                icon={mcIcon}
-                                increment={incrementMC}
-                                showProduction={showProductionChoice}
-                                production={mcProd + tr}
-                            />
-                            <SupplyCard 
-                                title='Steel'
-                                supply={steelAvailable}
-                                icon={steelIcon}
-                                increment={incrementSteel}
-                                showProduction={showProductionChoice}
-                                production={steelProd}
-                            />
-                            <SupplyCard 
-                                title='Titanium'
-                                supply={titaniumAvailable}
-                                icon={titaniumIcon}
-                                increment={incrementTitanium}
-                                showProduction={showProductionChoice}
-                                production={titaniumProd}
-                            />
-                            <SupplyCard 
-                                title='Plants'
-                                supply={plantsAvailable}
-                                icon={plantsIcon}
-                                increment={incrementPlants}
-                                showProduction={showProductionChoice}
-                                production={plantProd}
-                            />
-                            <SupplyCard 
-                                title='Energy'
-                                supply={energyAvailable}
-                                icon={energyIcon}
-                                increment={incrementEnergy}
-                                showProduction={showProductionChoice}
-                                production={energyProd - energyAvailable}
-                            />
-                            <SupplyCard 
-                                title='Heat'
-                                supply={heatAvailable}
-                                icon={heatIcon}
-                                increment={incrementHeat}
-                                showProduction={showProductionChoice}
-                                production={heatProd + energyAvailable}
-                            />
-                        </SupplyGrid>
-                    </SupplyWrapper>
+                    <Supply showProduction={showProductionChoice}/>
 
                     {/* PRODUCTION STEPPERS */}
                     <RightWrapper>
@@ -398,19 +310,6 @@ const MainGrid = styled.div`
 `
 
 const RightWrapper = styled.div``
-
-const SupplyWrapper = styled.div`
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: 16px;
-`
-
-const SupplyGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
-    overflow-y: auto;
-`
 
 const Heading = styled.h2``
 

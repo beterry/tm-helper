@@ -1,28 +1,47 @@
-import {useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
-// constants
-import {COLORS} from '../constants'
+// CONSTANTS
+import { COLORS } from '../constants'
+import { RESOURCE_NAMES } from '../providers/store-provider'
 
-// components
+// COMPONENTS
 import Cube from './Cube'
 
-// images
+// IMAGES
 import addIcon from '../icons/add-icon.svg'
 
+// CONTEXT
+import { StoreContext } from '../providers/store-provider'
+
 const SupplyCard = ({
+    resource,
     title,
-    supply,
-    increment,
     icon,
     showProduction,
-    production,
 }) => {
+    // context
+    const { store, adjustAvailable } = React.useContext(StoreContext)
+
+    // state
     const [incrementBy, setIncrementBy] = useState(0)
     const [showForm, setShowForm] = useState(false)
 
+    if (!RESOURCE_NAMES.includes(resource)) {
+        throw new Error(`Invalid resource: ${resource}. Supported resources: ${RESOURCE_NAMES.join(', ')}`)
+    }
+
+    // store values for specified resource
+    const supply = store[resource].available
+    const production = store[resource].production
+
     // this is used to force a component rerender
     const [forceReset, setForceReset] = useState(1)
+
+    // utility function to capitalize the first letter of a word
+    const capitalize = (word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1)
+    }
 
     const submitIncrement = (e) => {
         e.preventDefault()
@@ -30,9 +49,11 @@ const SupplyCard = ({
         // clear state on all cubes so new cubes are not touched
         resetCubes()
 
-        // invoke increment function
+        // adjust the availability of resource in the store
+        const nextAvailable = store[resource].available + incrementBy
         // don't allow supply to be less than 0
-        increment(supply + incrementBy < 0 ? supply * -1 : incrementBy)
+        const amount = nextAvailable < 0 ? supply * -1 : incrementBy
+        adjustAvailable(resource, amount)
 
         // reset increment
         setIncrementBy(0)
@@ -164,7 +185,7 @@ const SupplyCard = ({
 
     return (
         <Card>
-            <Title>{title}</Title>
+            <Title>{title ? title : capitalize(resource)}</Title>
 
             {/* Icon and count */}
             <Header>
@@ -200,7 +221,7 @@ const SupplyCard = ({
                     <SubmitButton
                         onClick={(e) => submitIncrement(e)}
                     >
-                        {incrementBy >=0 ? 'Add' : 'Spend'}
+                        {incrementBy >= 0 ? 'Add' : 'Spend'}
                     </SubmitButton>
                     <CancelButton
                         onClick={(e) => handleTapCancel(e)}
