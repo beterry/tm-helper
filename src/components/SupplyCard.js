@@ -21,7 +21,7 @@ const SupplyCard = ({
     showProduction,
 }) => {
     // context
-    const { store, adjustAvailable } = React.useContext(StoreContext)
+    const { rating, store, adjustAvailable } = React.useContext(StoreContext)
 
     // state
     const [incrementBy, setIncrementBy] = useState(0)
@@ -33,7 +33,11 @@ const SupplyCard = ({
 
     // store values for specified resource
     const supply = store[resource].available
-    const production = store[resource].production
+    let production = store[resource].production
+    // special production cases
+    if (resource === 'credits') { 
+        production = store[resource].production + rating
+    }
 
     // this is used to force a component rerender
     const [forceReset, setForceReset] = useState(1)

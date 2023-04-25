@@ -1,111 +1,37 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
 // CONSTANTS
-import {COLORS} from './constants'
+import {COLORS} from './constants';
 
 // COMPONENTS
-import TerraformRating from './components/TerraformRating'
-import Supply from './components/Supply'
-import ActionLog from './components/ActionLog'
+import TerraformRating from './components/TerraformRating';
+import Supply from './components/Supply';
+import ActionLog from './components/ActionLog';
 
 // CONTEXT
-import { LogContext } from './providers/log-provider'
+import { StoreContext } from './providers/store-provider';
 
 // ICONS
-import forestTile from './icons/tile_forest.svg'
-import tempTile from './icons/tile_temp.svg'
-import oceanTile from './icons/tile_ocean.svg'
-import Production from './components/Production'
+import forestTile from './icons/tile_forest.svg';
+import tempTile from './icons/tile_temp.svg';
+import oceanTile from './icons/tile_ocean.svg';
+import Production from './components/Production';
 
 function App() {
 
     //=============================================
     // CONTEXT
     //=============================================
-    const { addToLog } = React.useContext(LogContext)
-
-    //=============================================
-    // TR
-    //=============================================
-    const [tr, setTR] = useState(20)
-
-    const incrementTR = (amount) => {
-        setTR(tr + amount)
-        addToLog('TR ' + (amount < 0 ? "" : "+") + amount)
-    }
-
-    //=============================================
-    // MC
-    //=============================================
-    const [mcAvailable, setMcAvailable] = useState(0)
-    const [mcProd, setMcProd] = useState(0)
-
-    //=============================================
-    // STEEL
-    //=============================================
-    const [steelAvailable, setSteelAvailable] = useState(0)
-    const [steelProd, setSteelProd] = useState(0)
-
-    //=============================================
-    // TITANIUM
-    //=============================================
-    const [titaniumAvailable, setTitaniumAvailable] = useState(0)
-    const [titaniumProd, setTitaniumProd] = useState(0)
-
-    //=============================================
-    // PLANTS
-    //=============================================
-    const [plantsAvailable, setPlantsAvailable] = useState(0)
-    const [plantProd, setPlantProd] = useState(0)
-
-    //=============================================
-    // ENERGY
-    //=============================================
-    const [energyAvailable, setEnergyAvailable] = useState(0)
-    const [energyProd, setEnergyProd] = useState(0)
-
-    //=============================================
-    // HEAT
-    //=============================================
-    const [heatAvailable, setHeatAvailable] = useState(0)
-    const [heatProd, setHeatProd] = useState(0)
-    
-    //=============================================
-    // ACTIONS
-    //=============================================
-    const produce = () => {
-        // ME
-        setMcAvailable(mcAvailable + mcProd + tr)
-
-        // steel
-        setSteelAvailable(steelAvailable + steelProd)
-
-        // titanium
-        setTitaniumAvailable(titaniumAvailable + titaniumProd)
-
-        // plants
-        setPlantsAvailable(plantsAvailable + plantProd)
-
-        // heat
-        // heat must be produced before energy because leftover energy is added to heatAvailable
-        setHeatAvailable(heatAvailable + heatProd + energyAvailable)
-
-        // energy
-        // leftover energy is converted to heat, do not add energyAvailable here
-        setEnergyAvailable(energyProd)
-
-        toggleProductionChoice()
-        addToLog('Production Phase')
-    }
+    const { rating, adjustRating, produce } = React.useContext(StoreContext);
 
     //=============================================
     // MISC STATE
     //=============================================
-    const [showProductionChoice, setShowProductionChoice] = useState(false)
+    const [showProductionChoice, setShowProductionChoice] = useState(false);
 
     const toggleProductionChoice = () => {
-        setShowProductionChoice(!showProductionChoice)
+        setShowProductionChoice(!showProductionChoice);
     }
 
     //=============================================
@@ -119,22 +45,22 @@ function App() {
                 {/* TERRAFORMING RATING AND TILES */}
                 <TerraformRatingWrapper>
                     <TerraformRating
-                        tr={tr}
-                        increment={incrementTR}
+                        tr={rating}
+                        increment={adjustRating}
                     />
                     <TileWrapper>
                         <TileButton
-                            onClick={() => incrementTR(1)}
+                            onClick={() => adjustRating(1)}
                         >
                             <img src={forestTile} alt=""/>
                         </TileButton>
                         <TileButton
-                            onClick={() => incrementTR(1)}
+                            onClick={() => adjustRating(1)}
                         >
                             <img src={tempTile} alt=""/>
                         </TileButton>
                         <TileButton
-                            onClick={() => incrementTR(1)}
+                            onClick={() => adjustRating(1)}
                         >
                             <img src={oceanTile} alt=""/>
                         </TileButton>
@@ -162,11 +88,11 @@ function App() {
                 {
                     showProductionChoice ?
                     <>
-                        <ProduceButton onClick={() => produce()}>Produce</ProduceButton>
-                        <CancelProduceButton onClick={() => toggleProductionChoice()}>Cancel</CancelProduceButton>
+                        <ProduceButton onClick={produce}>Produce</ProduceButton>
+                        <CancelProduceButton onClick={toggleProductionChoice}>Cancel</CancelProduceButton>
                     </>
                     :
-                    <ProduceButton onClick={() => toggleProductionChoice()}>Produce</ProduceButton>
+                    <ProduceButton onClick={toggleProductionChoice}>Produce</ProduceButton>
                 }
             </ProduceWrapper>
         </MainWrapper>
@@ -270,4 +196,4 @@ const SectionSpacer = styled.div`
     height: ${props => props.size};
 `
 
-export default App
+export default App;
