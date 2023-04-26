@@ -12,10 +12,14 @@ import plantsIcon from '../icons/plants-icon.svg'
 import energyIcon from '../icons/energy-icon.svg'
 import heatIcon from '../icons/heat-icon.svg'
 
+// CONSTANTS
+import { COLORS } from '../constants'
+
 const Supply = ({ showProduction }) => {
     return (
         <SupplyWrapper>
             <Heading>Supply</Heading>
+            <Directions>Add cubes to your supply caches by tapping <Plus>+</Plus>. Remove cubes by tapping the cube you wish to spend.</Directions>
             <SupplyGrid>
                 <SupplyCard 
                     resource='credits'
@@ -55,7 +59,7 @@ const Supply = ({ showProduction }) => {
 
 const SupplyWrapper = styled.div`
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     gap: 16px;
 `
 
@@ -66,6 +70,22 @@ const SupplyGrid = styled.div`
     overflow-y: auto;
 `
 
+const Directions = styled.p`
+    color: rgba(255, 255, 255, 0.7);
+`
+
 const Heading = styled.h2``
+
+const Plus = styled.span`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: ${COLORS.mainBlue};
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: ${COLORS.cardBK};
+    font-weight: 600;
+`
 
 export default Supply

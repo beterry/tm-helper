@@ -47,6 +47,8 @@ const StoreProvider = ({ children }) => {
     }
 
     const adjustAvailable = (resource, amount) => {
+        if (!amount) { return; }
+
         // create a shallow copy of the current store
         let nextStore = Object.assign({}, store);
 

@@ -42,11 +42,6 @@ const SupplyCard = ({
     // this is used to force a component rerender
     const [forceReset, setForceReset] = useState(1)
 
-    // utility function to capitalize the first letter of a word
-    const capitalize = (word) => {
-        return word.charAt(0).toUpperCase() + word.slice(1)
-    }
-
     const submitIncrement = (e) => {
         e.preventDefault()
 
@@ -96,6 +91,13 @@ const SupplyCard = ({
     }
 
     const handleCubeTouch = (step) => {
+        // a cube was touched to spend, but the incrementBy was positive
+        // reset the form
+        if (incrementBy > 0 && step < 0) {
+            setIncrementBy(step);
+            return;
+        }
+
         // add or subtract from running increment total
         setIncrementBy(incrementBy + step)
 
@@ -189,7 +191,7 @@ const SupplyCard = ({
 
     return (
         <Card>
-            <Title>{title ? title : capitalize(resource)}</Title>
+            <Title>{title ? title : resource}</Title>
 
             {/* Icon and count */}
             <Header>
