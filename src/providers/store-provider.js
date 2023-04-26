@@ -1,6 +1,7 @@
 import React from 'react';
 
 // CONTEXT
+import { LogContext } from './log-provider';
 export const StoreContext = React.createContext();
 
 export const RESOURCE_NAMES = ['credits', 'steel', 'titanium', 'plants', 'energy', 'heat'];
@@ -34,10 +35,15 @@ const StoreProvider = ({ children }) => {
         },
     });
 
+    // context for logging actions
+    const { addToLog } = React.useContext(LogContext);
+
     const adjustRating = (amount) => {
         setRating(rating + amount);
 
-        // TODO: log the change
+        // log the change
+        const logMessage = `Terraforming rating ${amount > 0 ? 'increased' : 'decreased'}`;
+        addToLog(logMessage, amount, 'rating');
     }
 
     const adjustAvailable = (resource, amount) => {
@@ -52,10 +58,12 @@ const StoreProvider = ({ children }) => {
 
         setStore(nextStore);
 
-        // TODO: log the change
+        // log the change
+        const logMessage = `${resource} supply ${amount > 0 ? 'increased' : 'decreased'}`;
+        addToLog(logMessage, amount, resource);
     }
 
-    const adjustProduction = (resource, amount) => {
+    const adjustProduction = (resource, nextProduction) => {
         // create a shallow copy of the current store
         let nextStore = Object.assign({}, store);
 
@@ -63,11 +71,14 @@ const StoreProvider = ({ children }) => {
         const currentProduction = nextStore[resource].production;
 
         // adjust the resource availability in the store
-        nextStore[resource].production = currentProduction + amount;
+        nextStore[resource].production = nextProduction;
 
         setStore(nextStore);
 
-        // TODO: log the change
+        // log the change
+        const productionDelta = nextProduction - currentProduction;
+        const logMessage = `${resource} production ${productionDelta > 0 ? 'increased' : 'decreased'}`;
+        addToLog(logMessage, productionDelta, resource);
     }
 
     const produce = () => {
@@ -104,7 +115,8 @@ const StoreProvider = ({ children }) => {
 
         setStore(nextStore);
 
-        // TODO: log the change
+        // log the change;
+        addToLog('Production phase');
     }
 
     return (
