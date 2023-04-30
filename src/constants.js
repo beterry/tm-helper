@@ -35,4 +35,10 @@ const COLORS = {
     },
 }
 
-export {COLORS}
+const CUBE_VALUES = {
+    bronze: 1,
+    silver: 5,
+    gold: 10
+}
+
+export { COLORS, CUBE_VALUES }

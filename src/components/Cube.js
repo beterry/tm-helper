@@ -1,26 +1,13 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 
 // constants
 import { COLORS } from '../constants'
 
-const Cube = ({color, step, action}) => {
-    const [isTouched, setIsTouched] = useState(false)
-
-    const handleTouch = (e) => {
-        e.preventDefault()
-
-        // activate action
-        action(isTouched ? step : -step)
-
-        // toggle opacity
-        setIsTouched(!isTouched)
-    }
-
+const Cube = ({color, isTouched, handleCubeTouched, index}) => {
     return (
         <CubeWrapper 
             color={color} 
-            onClick={(e) => handleTouch(e)}
+            onClick={() => handleCubeTouched(index)}
             touched={isTouched}
         />
     )
@@ -35,4 +22,4 @@ const CubeWrapper = styled.button`
     opacity: ${props => props.touched ? .3 : 1};
 `
 
-export default Cube
+export default Cube;

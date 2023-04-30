@@ -14,6 +14,9 @@ import addIcon from '../icons/add-icon.svg'
 // CONTEXT
 import { StoreContext } from '../providers/store-provider'
 
+// UTILITIES
+import { getCubes } from '../utilities/cubes'
+
 const SupplyCard = ({
     resource,
     title,
@@ -24,8 +27,9 @@ const SupplyCard = ({
     const { rating, store, adjustAvailable } = React.useContext(StoreContext)
 
     // state
-    const [incrementBy, setIncrementBy] = useState(0)
-    const [showForm, setShowForm] = useState(false)
+    const [incrementBy, setIncrementBy] = useState(0);
+    const [showForm, setShowForm] = useState(false);
+    const [cubesTouched, setCubesTouched] = useState([]);
 
     if (!RESOURCE_NAMES.includes(resource)) {
         throw new Error(`Invalid resource: ${resource}. Supported resources: ${RESOURCE_NAMES.join(', ')}`)
@@ -39,14 +43,19 @@ const SupplyCard = ({
         production = store[resource].production + rating
     }
 
-    // this is used to force a component rerender
-    const [forceReset, setForceReset] = useState(1)
+    // get data for cubes to display
+    const cubes = getCubes(supply);
+    // loop through the cubes and compare it to the cubes that are touched via state
+    cubes.forEach((cube, index) => {
+        if (cubesTouched.includes(index)) {
+            cube.isTouched = true;
+        }
+    })
 
     const submitIncrement = (e) => {
         e.preventDefault()
 
-        // clear state on all cubes so new cubes are not touched
-        resetCubes()
+        // TODO: clear state on all cubes so new cubes are not touched
 
         // adjust the availability of resource in the store
         const nextAvailable = store[resource].available + incrementBy
@@ -59,6 +68,8 @@ const SupplyCard = ({
 
         // hide form
         setShowForm(false)
+
+        setCubesToSolid();
     }
 
     const handleTapAdd = (e) => {
@@ -75,8 +86,7 @@ const SupplyCard = ({
         // show the form
         setShowForm(true)
 
-        // make sure all cubes are solid
-        resetCubes()
+        setCubesToSolid();
     }
 
     const handleTapCancel = (e) => {
@@ -86,11 +96,22 @@ const SupplyCard = ({
         setIncrementBy(0)
         setShowForm(false)
 
-        // make sure all cubes are solid
-        resetCubes()
+        setCubesToSolid();
     }
 
-    const handleCubeTouch = (step) => {
+    const handleCubeTouched = (cubeIndex) => {
+        const step = cubes[cubeIndex].isTouched ? cubes[cubeIndex].value : -cubes[cubeIndex].value;
+
+        // set whether the cube is touched
+        // TODO: seperate this logic into a custom hook?
+        const nextCubesTouchedSet = new Set(cubesTouched);
+        if (nextCubesTouchedSet.has(cubeIndex)) {
+            nextCubesTouchedSet.delete(cubeIndex);
+        } else {
+            nextCubesTouchedSet.add(cubeIndex);
+        }
+        setCubesTouched([...nextCubesTouchedSet]);
+
         // a cube was touched to spend, but the incrementBy was positive
         // reset the form
         if (incrementBy > 0 && step < 0) {
@@ -99,94 +120,14 @@ const SupplyCard = ({
         }
 
         // add or subtract from running increment total
-        setIncrementBy(incrementBy + step)
+        setIncrementBy(incrementBy + step);
 
         // show the form
-        setShowForm(true)
-    }
-    
-    // this function simply increments the forceReset state
-    // this resets all cubes, making sure they don't incorrectly hold state
-    // we use this function to return all cubes to solid
-    const resetCubes = () => {
-        setForceReset(forceReset + 1)
-     }
-
-    // THESE ARE THE CUBE VALUES
-    // bronze -- 1
-    // silver -- 5
-    // gold -- 10
-
-    // we start by making the entire supply bronze cubes
-    let bronze = supply
-    let silver = 0
-    let gold = 0
-
-    // we then use these break points to convert bronze cubes to silver and gold
-    if (supply >= 10){
-        silver = 1
-        bronze = supply - 5
+        setShowForm(true);
     }
 
-    if (supply >= 15){
-        silver = 2
-        bronze = supply - 10
-    }
-
-    if (supply > 20){
-        silver = 2
-        bronze = supply - 10
-    }
-
-    if (supply > 25){
-        gold = 1
-        silver = 2
-        bronze = supply - 20
-    }
-
-    if (supply > 30){
-        gold = Math.floor((supply - 15) / 10)
-        silver = 2
-        bronze = supply - (gold * 10) - 10
-    }
-
-    // build bronze cube array
-    let bronzeCubes = []
-    for (let i = 0; i < bronze; i++){
-        bronzeCubes.push(
-            <Cube
-                key={`bronze ${i} ${forceReset}`}
-                color='bronze'
-                step={1}
-                action={handleCubeTouch}
-            />
-        )
-    }
-
-    // build silver cube array
-    let silverCubes = []
-    for (let i = 0; i < silver; i++){
-        silverCubes.push(
-            <Cube
-                key={`silver ${i} ${forceReset}`}
-                color='silver'
-                step={5}
-                action={handleCubeTouch}
-            />
-        )
-    }
-
-    // build gold cube array
-    let goldCubes = []
-    for (let i = 0; i < gold; i++){
-        goldCubes.push(
-            <Cube
-                key={`gold ${i} ${forceReset}`}
-                color='gold'
-                step={10}
-                action={handleCubeTouch}
-            />
-        )
+    const setCubesToSolid = () => {
+        setCubesTouched([]);
     }
 
     return (
@@ -208,9 +149,7 @@ const SupplyCard = ({
             {/* CUBES */}
             {supply > 0 && 
                 <CubeWrapper>
-                    {bronzeCubes}
-                    {silverCubes}
-                    {goldCubes}
+                    {cubes.map((cube, i) => <Cube handleCubeTouched={handleCubeTouched} index={i} {...cube} key={i}/>)}
                 </CubeWrapper>
             }
 
