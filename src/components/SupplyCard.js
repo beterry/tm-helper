@@ -14,6 +14,9 @@ import addIcon from '../icons/add-icon.svg'
 // CONTEXT
 import { StoreContext } from '../providers/store-provider'
 
+// HOOKS
+import useCubesTouched from '../hooks/useCubesTouched'
+
 // UTILITIES
 import { getCubes } from '../utilities/cubes'
 
@@ -29,7 +32,7 @@ const SupplyCard = ({
     // state
     const [incrementBy, setIncrementBy] = useState(0);
     const [showForm, setShowForm] = useState(false);
-    const [cubesTouched, setCubesTouched] = useState([]);
+    const [cubesTouched, toggleCubeTouched, clearCubesTouched] = useCubesTouched();
 
     if (!RESOURCE_NAMES.includes(resource)) {
         throw new Error(`Invalid resource: ${resource}. Supported resources: ${RESOURCE_NAMES.join(', ')}`)
@@ -43,19 +46,21 @@ const SupplyCard = ({
         production = store[resource].production + rating
     }
 
-    // get data for cubes to display
-    const cubes = getCubes(supply);
-    // loop through the cubes and compare it to the cubes that are touched via state
-    cubes.forEach((cube, index) => {
-        if (cubesTouched.includes(index)) {
-            cube.isTouched = true;
-        }
-    })
+    // GET DATA FOR CUBES TO RENDER
+    // memoize this value so we only recalculate if the supply or cubesTouched values change
+    const cubes = React.useMemo(() => {
+        const cubes = getCubes(supply);
+        // loop through the cubes and compare it to the cubes that are touched via state
+        cubes.forEach((cube, index) => {
+            if (cubesTouched.includes(index)) {
+                cube.isTouched = true;
+            }
+        })
+        return cubes;
+    }, [supply, cubesTouched])
 
     const submitIncrement = (e) => {
         e.preventDefault()
-
-        // TODO: clear state on all cubes so new cubes are not touched
 
         // adjust the availability of resource in the store
         const nextAvailable = store[resource].available + incrementBy
@@ -69,7 +74,8 @@ const SupplyCard = ({
         // hide form
         setShowForm(false)
 
-        setCubesToSolid();
+        // set all cubes to solid
+        clearCubesTouched();
     }
 
     const handleTapAdd = (e) => {
@@ -86,7 +92,10 @@ const SupplyCard = ({
         // show the form
         setShowForm(true)
 
-        setCubesToSolid();
+        if (cubesTouched.length > 0) {
+            // set all cubes to solid
+            clearCubesTouched();
+        }
     }
 
     const handleTapCancel = (e) => {
@@ -96,23 +105,19 @@ const SupplyCard = ({
         setIncrementBy(0)
         setShowForm(false)
 
-        setCubesToSolid();
+        // set all cubes to solid
+        clearCubesTouched();
     }
 
     const handleCubeTouched = (cubeIndex) => {
-        const step = cubes[cubeIndex].isTouched ? cubes[cubeIndex].value : -cubes[cubeIndex].value;
+        const touchedCube = cubes[cubeIndex];
+        const cubeValue = touchedCube.value;
+        const step = touchedCube.isTouched ? cubeValue : -cubeValue;
 
-        // set whether the cube is touched
-        // TODO: seperate this logic into a custom hook?
-        const nextCubesTouchedSet = new Set(cubesTouched);
-        if (nextCubesTouchedSet.has(cubeIndex)) {
-            nextCubesTouchedSet.delete(cubeIndex);
-        } else {
-            nextCubesTouchedSet.add(cubeIndex);
-        }
-        setCubesTouched([...nextCubesTouchedSet]);
+        toggleCubeTouched(cubeIndex);
 
         // a cube was touched to spend, but the incrementBy was positive
+        // transitioning from adding to spending
         // reset the form
         if (incrementBy > 0 && step < 0) {
             setIncrementBy(step);
@@ -124,10 +129,6 @@ const SupplyCard = ({
 
         // show the form
         setShowForm(true);
-    }
-
-    const setCubesToSolid = () => {
-        setCubesTouched([]);
     }
 
     return (
