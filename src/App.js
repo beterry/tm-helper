@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 // CONSTANTS
@@ -13,26 +13,15 @@ import ActionLog from './components/ActionLog';
 import { StoreContext } from './providers/store-provider';
 
 // ICONS
-import forestTile from './icons/tile_forest.svg';
-import tempTile from './icons/tile_temp.svg';
-import oceanTile from './icons/tile_ocean.svg';
 import Production from './components/Production';
+import ProductionModal from './components/ProductionModal';
 
 function App() {
 
     //=============================================
     // CONTEXT
     //=============================================
-    const { rating, adjustRating, produce } = React.useContext(StoreContext);
-
-    //=============================================
-    // MISC STATE
-    //=============================================
-    const [showProductionChoice, setShowProductionChoice] = useState(false);
-
-    const toggleProductionChoice = () => {
-        setShowProductionChoice(!showProductionChoice);
-    }
+    const { rating, adjustRating } = React.useContext(StoreContext);
 
     //=============================================
     // RENDER
@@ -48,28 +37,12 @@ function App() {
                         tr={rating}
                         increment={adjustRating}
                     />
-                    <TileWrapper>
-                        <TileButton
-                            onClick={() => adjustRating(1)}
-                        >
-                            <img src={forestTile} alt=""/>
-                        </TileButton>
-                        <TileButton
-                            onClick={() => adjustRating(1)}
-                        >
-                            <img src={tempTile} alt=""/>
-                        </TileButton>
-                        <TileButton
-                            onClick={() => adjustRating(1)}
-                        >
-                            <img src={oceanTile} alt=""/>
-                        </TileButton>
-                    </TileWrapper>
+                    <ProductionModal />
                 </TerraformRatingWrapper>
 
                 <MainGrid>
                     {/* SUPPLY CARDS */}
-                    <Supply showProduction={showProductionChoice}/>
+                    <Supply />
 
                     <RightWrapper>
                         {/* PRODUCTION STEPPERS */}
@@ -82,19 +55,6 @@ function App() {
                     </RightWrapper>
                 </MainGrid>
             </MaxWidthWrapper>
-
-            {/* PRODUCE BUTTON -- BOTTOM RIGHT */}
-            <ProduceWrapper>
-                {
-                    showProductionChoice ?
-                    <>
-                        <ProduceButton onClick={produce}>Produce</ProduceButton>
-                        <CancelProduceButton onClick={toggleProductionChoice}>Cancel</CancelProduceButton>
-                    </>
-                    :
-                    <ProduceButton onClick={toggleProductionChoice}>Produce</ProduceButton>
-                }
-            </ProduceWrapper>
         </MainWrapper>
     )
 }
@@ -124,31 +84,11 @@ const TerraformRatingWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     gap: 32px;
+    align-items: center;
 
     @media screen and (min-width: 600px){
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr auto;
     }
-`
-
-const TileWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    @media screen and (min-width: 600px){
-        justify-content: flex-end;
-    }
-`
-
-const TileButton = styled.button`
-    width: 70px;
-    height: 70px;
-    background-color: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
 `
 
 const MainGrid = styled.div`
@@ -162,35 +102,6 @@ const MainGrid = styled.div`
 `
 
 const RightWrapper = styled.div``
-
-const ProduceWrapper = styled.div`
-    position: fixed;
-    bottom: 32px;
-    right: 24px;
-    display: flex;
-    justify-content: flex-end;
-`
-
-const ProduceButton = styled.button`
-    background-color: ${COLORS.mainBlue};
-    border: none;
-    min-height: 50px;
-    min-width: 150px;
-    border-radius: 25px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .7px;
-    margin: 0 8px;
-`
-
-const CancelProduceButton = styled(ProduceButton)`
-    background-color: ${COLORS.error};
-    color: white;
-`
 
 const SectionSpacer = styled.div`
     height: ${props => props.size};

@@ -1,5 +1,6 @@
 const COLORS = {
-    background: '#082032',
+    background: 'hsl(206, 84%, 11%)',
+    backdrop: 'hsl(206 84% 11% / 90%)',
     mainBlue: 'hsl(215, 100%, 68%)',
     error: 'hsl(10, 100%, 58%)',
     cardBK: 'hsl(215, 26%, 23%, .9)',
