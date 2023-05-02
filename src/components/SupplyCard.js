@@ -192,9 +192,13 @@ const Card = styled.div`
     border-radius: 8px;
     padding: 16px;
     position: relative;
-    min-height: 200px;
     display: flex;
     flex-direction: column;
+    
+    @media screen and (min-width: 550px) {
+        min-height: 200px;
+        
+    }
 `
 
 const Title = styled.h2`
@@ -295,4 +299,4 @@ const Spacer = styled.div`
     flex-grow: 1;
 `
 
-export default SupplyCard
+export default SupplyCard;

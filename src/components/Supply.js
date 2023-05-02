@@ -72,6 +72,7 @@ const SupplyGrid = styled.div`
 
 const Directions = styled.p`
     color: rgba(255, 255, 255, 0.7);
+    line-height: 1.25;
 `
 
 const Heading = styled.h2``
