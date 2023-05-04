@@ -6,33 +6,41 @@ export const StoreContext = React.createContext();
 
 export const RESOURCE_NAMES = ['credits', 'steel', 'titanium', 'plants', 'energy', 'heat'];
 
+const defaultStore = {
+    credits: {
+        available: 0,
+        production: 0
+    },
+    steel: {
+        available: 0,
+        production: 0
+    },
+    titanium: {
+        available: 0,
+        production: 0
+    },
+    plants: {
+        available: 0,
+        production: 0
+    },
+    energy: {
+        available: 0,
+        production: 0
+    },
+    heat: {
+        available: 0,
+        production: 0
+    },
+}
+
 const StoreProvider = ({ children }) => {
-    const [rating, setRating] = React.useState(20);
-    const [store, setStore] = React.useState({
-        credits: {
-            available: 0,
-            production: 0
-        },
-        steel: {
-            available: 0,
-            production: 0
-        },
-        titanium: {
-            available: 0,
-            production: 0
-        },
-        plants: {
-            available: 0,
-            production: 0
-        },
-        energy: {
-            available: 0,
-            production: 0
-        },
-        heat: {
-            available: 0,
-            production: 0
-        },
+    const [rating, setRating] = React.useState(() => {
+        const savedRating = localStorage.getItem('rating');
+        return savedRating ? parseInt(savedRating) : 20;
+    });
+    const [store, setStore] = React.useState(() => {
+        const savedStore = localStorage.getItem("store");
+        return savedStore ? JSON.parse(savedStore) : defaultStore;
     });
 
     // context for logging actions
@@ -121,8 +129,32 @@ const StoreProvider = ({ children }) => {
         addToLog('Production phase');
     }
 
+    const resetStore = () => {
+        setStore({...defaultStore});
+        setRating(20);
+    }
+
+    // saved store and rating to local storage so refreshing the page doesn't clear the UI
+    React.useEffect(() => {
+        localStorage.setItem('store', JSON.stringify(store));
+    }, [store])
+
+    React.useEffect(() => {
+        localStorage.setItem('rating', rating);
+    }, [rating])
+
+    const value = { 
+        rating, 
+        store, 
+        adjustRating, 
+        adjustAvailable, 
+        adjustProduction, 
+        produce, 
+        resetStore 
+    };
+
     return (
-        <StoreContext.Provider value={{ rating, store, adjustRating, adjustAvailable, adjustProduction, produce }}>
+        <StoreContext.Provider value={value}>
             {children}
         </StoreContext.Provider>
     )

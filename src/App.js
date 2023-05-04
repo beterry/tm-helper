@@ -15,6 +15,7 @@ import { StoreContext } from './providers/store-provider';
 // ICONS
 import Production from './components/Production';
 import ProductionModal from './components/ProductionModal';
+import ResetModal from './components/ResetModal';
 
 function App() {
 
@@ -31,13 +32,16 @@ function App() {
         <MainWrapper>
             <MaxWidthWrapper>
 
-                {/* TERRAFORMING RATING AND TILES */}
+                {/* TERRAFORMING RATING AND ACTIONS */}
                 <TerraformRatingWrapper>
                     <TerraformRating
                         tr={rating}
                         increment={adjustRating}
                     />
-                    <ProductionModal />
+                    <ActionWrapper>
+                        <ProductionModal />
+                        <ResetModal />
+                    </ActionWrapper>
                 </TerraformRatingWrapper>
 
                 <MainGrid>
@@ -68,6 +72,11 @@ const MainWrapper = styled.main`
     @media screen and (min-width: 600px){
         padding: 32px;
     }
+`
+
+const ActionWrapper = styled.div`
+    display: grid;
+    grid-template-columns: 1fr auto;
 `
 
 const MaxWidthWrapper = styled.div`

@@ -3,7 +3,10 @@ import React from 'react'
 export const LogContext = React.createContext();
 
 const LogProvider = ({ children }) => {
-    const [log, setLog] = React.useState([])
+    const [log, setLog] = React.useState(() => {
+        const savedLog = localStorage.getItem('log');
+        return savedLog ? JSON.parse(savedLog) : [];
+    })
 
     // add an action to the log state
     const addToLog = (message, amount, icon) => {
@@ -18,8 +21,16 @@ const LogProvider = ({ children }) => {
         setLog(prevLog => [newAction, ...prevLog]);
     }
 
+    const resetLog = () => {
+        setLog([]);
+    }
+
+    React.useEffect(() => {
+        localStorage.setItem('log', JSON.stringify(log));
+    }, [log])
+
     return (
-        <LogContext.Provider value={{log, addToLog}}>
+        <LogContext.Provider value={{log, addToLog, resetLog}}>
             {children}
         </LogContext.Provider>
     )
