@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-// CONTEXT
-import { StoreContext } from '../providers/store-provider'
-
 // constants
 import { COLORS } from '../constants'
-import { RESOURCE_NAMES } from '../providers/store-provider'
+import { RESOURCE_NAMES } from '../hooks/useStore'
 
 // images
 import arrowRight from '../icons/chevron_right.svg'
 import arrowLeft from '../icons/chevron_left.svg'
 
-const ProductionStepper = ({resource, icon, min = 0}) => {
+const ProductionStepper = ({resource, production, adjustProduction, icon, min = 0}) => {
 
     // throw error if resource in invalid
     if (!RESOURCE_NAMES.includes(resource)) {
@@ -27,10 +24,6 @@ const ProductionStepper = ({resource, icon, min = 0}) => {
 
     // tracks largest number in the range
     const [maxRange, setMaxRange] = useState(range)
-
-    // get store data from context
-    const { store, adjustProduction } = React.useContext(StoreContext)
-    const production = store[resource].production
 
     const pageUp = () => {
         setMinRange(minRange + range)

@@ -9,8 +9,8 @@ import TerraformRating from './components/TerraformRating';
 import Supply from './components/Supply';
 import ActionLog from './components/ActionLog';
 
-// CONTEXT
-import { StoreContext } from './providers/store-provider';
+// HOOKS
+import useStore from './hooks/useStore';
 
 // ICONS
 import Production from './components/Production';
@@ -18,15 +18,7 @@ import ProductionModal from './components/ProductionModal';
 import ResetModal from './components/ResetModal';
 
 function App() {
-
-    //=============================================
-    // CONTEXT
-    //=============================================
-    const { rating, adjustRating } = React.useContext(StoreContext);
-
-    //=============================================
-    // RENDER
-    //=============================================
+    const [rating, store, adjustRating, adjustAvailable, adjustProduction, produce, resetStore] = useStore();
 
     return (
         <MainWrapper>
@@ -39,18 +31,18 @@ function App() {
                         increment={adjustRating}
                     />
                     <ActionWrapper>
-                        <ProductionModal />
-                        <ResetModal />
+                        <ProductionModal produce={produce}/>
+                        <ResetModal resetStore={resetStore}/>
                     </ActionWrapper>
                 </TerraformRatingWrapper>
 
                 <MainGrid>
                     {/* SUPPLY CARDS */}
-                    <Supply />
+                    <Supply store={store} adjustAvailable={adjustAvailable}/>
 
                     <RightWrapper>
                         {/* PRODUCTION STEPPERS */}
-                        <Production />
+                        <Production store={store} adjustProduction={adjustProduction}/>
 
                         <SectionSpacer size='32px'/>
 

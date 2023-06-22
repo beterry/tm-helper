@@ -6,15 +6,13 @@ import { Dialog } from '@headlessui/react'
 import { COLORS } from '../constants';
 
 // CONTEXT
-import { StoreContext } from '../providers/store-provider';
 import { LogContext } from '../providers/log-provider';
 
 // ICONS
 import { RefreshCw } from 'react-feather';
 
-const ResetModal = () => {
+const ResetModal = ({ resetStore }) => {
     const [isOpen, setIsOpen] = React.useState(false);
-    const { resetStore } = React.useContext(StoreContext);
     const { resetLog } = React.useContext(LogContext);
 
     const confirmReset = () => {

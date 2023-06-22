@@ -15,7 +15,7 @@ import heatIcon from '../icons/heat-icon.svg'
 // CONSTANTS
 import { COLORS } from '../constants'
 
-const Supply = ({ showProduction }) => {
+const Supply = ({ store, adjustAvailable }) => {
     return (
         <SupplyWrapper>
             <Heading>Supply</Heading>
@@ -24,33 +24,39 @@ const Supply = ({ showProduction }) => {
                 <SupplyCard 
                     resource='credits'
                     title='Mega Credits'
+                    supply={store['credits'].available}
                     icon={mcIcon}
-                    showProduction={showProduction}
+                    adjustAvailable={adjustAvailable}
                 />
                 <SupplyCard 
                     resource='steel'
+                    supply={store['steel'].available}
                     icon={steelIcon}
-                    showProduction={showProduction}
+                    adjustAvailable={adjustAvailable}
                 />
                 <SupplyCard 
                     resource='titanium'
+                    supply={store['titanium'].available}
                     icon={titaniumIcon}
-                    showProduction={showProduction}
+                    adjustAvailable={adjustAvailable}
                 />
                 <SupplyCard 
                     resource='plants'
+                    supply={store['plants'].available}
                     icon={plantsIcon}
-                    showProduction={showProduction}
+                    adjustAvailable={adjustAvailable}
                 />
                 <SupplyCard 
                     resource='energy'
+                    supply={store['energy'].available}
                     icon={energyIcon}
-                    showProduction={showProduction}
+                    adjustAvailable={adjustAvailable}
                 />
                 <SupplyCard 
                     resource='heat'
+                    supply={store['heat'].available}
                     icon={heatIcon}
-                    showProduction={showProduction}
+                    adjustAvailable={adjustAvailable}
                 />
             </SupplyGrid>
         </SupplyWrapper>

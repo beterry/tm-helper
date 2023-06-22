@@ -1,8 +1,7 @@
-import React from 'react';
+import React from "react";
 
 // CONTEXT
-import { LogContext } from './log-provider';
-export const StoreContext = React.createContext();
+import { LogContext } from '../providers/log-provider';
 
 export const RESOURCE_NAMES = ['credits', 'steel', 'titanium', 'plants', 'energy', 'heat'];
 
@@ -33,7 +32,7 @@ const defaultStore = {
     },
 }
 
-const StoreProvider = ({ children }) => {
+const useStore = () => {
     const [rating, setRating] = React.useState(() => {
         const savedRating = localStorage.getItem('rating');
         return savedRating ? parseInt(savedRating) : 20;
@@ -143,21 +142,7 @@ const StoreProvider = ({ children }) => {
         localStorage.setItem('rating', rating);
     }, [rating])
 
-    const value = { 
-        rating, 
-        store, 
-        adjustRating, 
-        adjustAvailable, 
-        adjustProduction, 
-        produce, 
-        resetStore 
-    };
-
-    return (
-        <StoreContext.Provider value={value}>
-            {children}
-        </StoreContext.Provider>
-    )
+    return [rating, store, adjustRating, adjustAvailable, adjustProduction, produce, resetStore];
 }
 
-export default StoreProvider;
+export default useStore;

@@ -5,12 +5,8 @@ import { Dialog } from '@headlessui/react'
 // CONSTANTS
 import { COLORS } from '../constants';
 
-// CONTEXT
-import { StoreContext } from '../providers/store-provider';
-
-const ProductionModal = () => {
+const ProductionModal = ({ produce }) => {
     const [isOpen, setIsOpen] = React.useState(false);
-    const { produce } = React.useContext(StoreContext);
 
     const confirmProduce = () => {
         produce();

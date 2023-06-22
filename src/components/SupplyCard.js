@@ -3,16 +3,13 @@ import styled from 'styled-components'
 
 // CONSTANTS
 import { COLORS } from '../constants'
-import { RESOURCE_NAMES } from '../providers/store-provider'
+import { RESOURCE_NAMES } from '../hooks/useStore'
 
 // COMPONENTS
 import Cube from './Cube'
 
 // IMAGES
 import addIcon from '../icons/add-icon.svg'
-
-// CONTEXT
-import { StoreContext } from '../providers/store-provider'
 
 // HOOKS
 import useCubesTouched from '../hooks/useCubesTouched'
@@ -23,12 +20,10 @@ import { getCubes } from '../utilities/cubes'
 const SupplyCard = ({
     resource,
     title,
+    supply,
     icon,
-    showProduction,
+    adjustAvailable,
 }) => {
-    // context
-    const { rating, store, adjustAvailable } = React.useContext(StoreContext)
-
     // state
     const [incrementBy, setIncrementBy] = useState(0);
     const [showForm, setShowForm] = useState(false);
@@ -36,14 +31,6 @@ const SupplyCard = ({
 
     if (!RESOURCE_NAMES.includes(resource)) {
         throw new Error(`Invalid resource: ${resource}. Supported resources: ${RESOURCE_NAMES.join(', ')}`)
-    }
-
-    // store values for specified resource
-    const supply = store[resource].available
-    let production = store[resource].production
-    // special production cases
-    if (resource === 'credits') { 
-        production = store[resource].production + rating
     }
 
     // GET DATA FOR CUBES TO RENDER
@@ -63,7 +50,7 @@ const SupplyCard = ({
         e.preventDefault()
 
         // adjust the availability of resource in the store
-        const nextAvailable = store[resource].available + incrementBy
+        const nextAvailable = supply + incrementBy
         // don't allow supply to be less than 0
         const amount = nextAvailable < 0 ? supply * -1 : incrementBy
         adjustAvailable(resource, amount)
@@ -139,11 +126,8 @@ const SupplyCard = ({
             <Header>
                 <Icon src={icon} alt=''/>
                 <Supply>{supply}</Supply>
-                {(showForm && !showProduction) &&
+                {showForm &&
                     <AfterIncrement>{supply + incrementBy}</AfterIncrement>
-                }
-                {(showProduction && production !== 0) &&
-                    <AfterIncrement>{production > 0 && "+"}{production}</AfterIncrement>
                 }
             </Header>
 

@@ -12,7 +12,7 @@ import plantsIcon from '../icons/plants-icon.svg'
 import energyIcon from '../icons/energy-icon.svg'
 import heatIcon from '../icons/heat-icon.svg'
 
-const Production = () => {
+const Production = ({ store, adjustProduction }) => {
     return (
         <Wrapper>
             <Heading>Production</Heading>
@@ -20,27 +20,39 @@ const Production = () => {
             <ProductionWrapper>
                 <ProductionStepper
                     resource='credits'
+                    production={store['credits'].production}
+                    adjustProduction={adjustProduction}
                     icon={mcIcon}
                     min={-5}
                 />
                 <ProductionStepper
                     resource='steel'
+                    production={store['steel'].production}
+                    adjustProduction={adjustProduction}
                     icon={steelIcon}
                 />
                 <ProductionStepper
                     resource='titanium'
+                    production={store['titanium'].production}
+                    adjustProduction={adjustProduction}
                     icon={titaniumIcon}
                 />
                 <ProductionStepper
                     resource='plants'
+                    production={store['plants'].production}
+                    adjustProduction={adjustProduction}
                     icon={plantsIcon}
                 />
                 <ProductionStepper
                     resource='energy'
+                    production={store['energy'].production}
+                    adjustProduction={adjustProduction}
                     icon={energyIcon}
                 />
                 <ProductionStepper
                     resource='heat'
+                    production={store['heat'].production}
+                    adjustProduction={adjustProduction}
                     icon={heatIcon}
                 />
             </ProductionWrapper>
