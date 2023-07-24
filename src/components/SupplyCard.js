@@ -28,6 +28,8 @@ const SupplyCard = ({
     const [incrementBy, setIncrementBy] = useState(0);
     const [showForm, setShowForm] = useState(false);
     const [cubesTouched, toggleCubeTouched, clearCubesTouched] = useCubesTouched();
+    const addButtonRef = React.useRef(null);
+    const incrementInputRef = React.useRef(null);
 
     if (!RESOURCE_NAMES.includes(resource)) {
         throw new Error(`Invalid resource: ${resource}. Supported resources: ${RESOURCE_NAMES.join(', ')}`)
@@ -45,6 +47,15 @@ const SupplyCard = ({
         })
         return cubes;
     }, [supply, cubesTouched])
+
+    // this effect handles focus when we show or hide the increment form
+    React.useEffect(() => {
+        if (showForm) {
+            focusIncrementInput();
+        } else {
+            focusAddButton();
+        }
+    }, [showForm])
 
     const submitIncrement = (e) => {
         e.preventDefault()
@@ -118,13 +129,34 @@ const SupplyCard = ({
         setShowForm(true);
     }
 
+    // when the form disappears, focus the add button
+    // prevents weird focus behavior for keyboard users
+    const focusAddButton = () => {
+        addButtonRef.current.focus();
+    }
+
+    // when the form appears, focus the form's input
+    // this creates a better UX for keyboard users
+    const focusIncrementInput = () => {
+        incrementInputRef.current.focus();
+    }
+
     return (
         <Card>
+            {/* ADD BUTTON - TOP RIGHT */}
+            <AddButton
+                onClick={(e) => handleTapAdd(e)}
+                aria-label={`Add ${resource}`}
+                ref={addButtonRef}
+            >
+                <AddIcon src={addIcon} alt='Add'/>
+            </AddButton>
+
             <Title>{title ? title : resource}</Title>
 
             {/* Icon and count */}
             <Header>
-                <Icon src={icon} alt=''/>
+                <Icon src={icon} alt={resource}/>
                 <Supply>{supply}</Supply>
                 {showForm &&
                     <AfterIncrement>{supply + incrementBy}</AfterIncrement>
@@ -134,11 +166,19 @@ const SupplyCard = ({
             {/* CUBES */}
             {supply > 0 && 
                 <CubeWrapper>
-                    {cubes.map((cube, i) => <Cube handleCubeTouched={handleCubeTouched} index={i} {...cube} key={i}/>)}
+                    {cubes.map((cube, i) => 
+                        <Cube
+                            handleCubeTouched={handleCubeTouched} 
+                            index={i} 
+                            resource={resource}
+                            {...cube} 
+                            key={i}/>
+                    )}
                 </CubeWrapper>
             }
 
             <Spacer />
+
 
             {/* FORM */}
             {showForm &&
@@ -147,6 +187,7 @@ const SupplyCard = ({
                         type='number'
                         value={incrementBy}
                         onChange={(e) => setIncrementBy(parseInt(e.target.value))}
+                        ref={incrementInputRef}
                     />
                     <SubmitButton
                         onClick={(e) => submitIncrement(e)}
@@ -160,18 +201,11 @@ const SupplyCard = ({
                     </CancelButton>
                 </IncrementForm>
             }
-
-            {/* ADD BUTTON - TOP RIGHT */}
-            <AddButton
-                onClick={(e) => handleTapAdd(e)}
-            >
-                <AddIcon src={addIcon} alt='Add'/>
-            </AddButton>
         </Card>
     )
 }
 
-const Card = styled.div`
+const Card = styled.article`
     background-color: ${COLORS.cardBK};
     border-radius: 8px;
     padding: 16px;

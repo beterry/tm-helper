@@ -23,7 +23,10 @@ const ResetModal = ({ resetStore }) => {
 
     return (
         <>
-            <ResetButton onClick={() => setIsOpen(true)}>
+            <ResetButton 
+                onClick={() => setIsOpen(true)}
+                aria-label='Reset board'
+            >
                 <RefreshCw />
             </ResetButton>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)}>

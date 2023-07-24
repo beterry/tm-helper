@@ -43,10 +43,11 @@ const ProductionStepper = ({resource, production, adjustProduction, icon, min = 
 
     return (
         <Wrapper>
-            <IconWrapper><Icon src={icon} alt=""/></IconWrapper>
+            <IconWrapper><Icon src={icon} alt={resource}/></IconWrapper>
             <PageButton
                 onClick={() => pageDown()}
                 disabled={minRange <= min}
+                aria-label={`Decrease ${resource} production options`}
             >
                 <Icon src={arrowLeft} alt="" />
             </PageButton>
@@ -56,12 +57,14 @@ const ProductionStepper = ({resource, production, adjustProduction, icon, min = 
                     active={n === production}
                     onClick={() => adjustProduction(resource, n)}
                     disabled={n < min}
+                    aria-label={`${n} ${resource} production`}
                 >
                     {n}
                 </ProductionButton>
             )}
             <PageButton
                 onClick={() => pageUp()}
+                aria-label={`Increase ${resource} production options`}
             >
                 <Icon src={arrowRight} alt="" />
             </PageButton>

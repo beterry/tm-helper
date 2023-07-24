@@ -12,7 +12,7 @@ const TerraformRating = ({tr, increment}) => {
                 <IncrementButton
                     onClick={() => increment(-1)}
                 >
-                    <Icon src={minusIcon} alt=""/>
+                    <Icon src={minusIcon} alt='Minus 1 TR'/>
                 </IncrementButton>
 
                 <Rating>{tr}</Rating>
@@ -20,14 +20,14 @@ const TerraformRating = ({tr, increment}) => {
                 <IncrementButton
                     onClick={() => increment(1)}
                 >
-                    <Icon src={addIcon} alt=""/>
+                    <Icon src={addIcon} alt='Plus 1 TR'/>
                 </IncrementButton>
             </RatingWrapper>
         </Wrapper>
     )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -3,12 +3,13 @@ import styled from 'styled-components'
 // constants
 import { COLORS } from '../constants'
 
-const Cube = ({color, isTouched, handleCubeTouched, index}) => {
+const Cube = ({color, isTouched, handleCubeTouched, index, value, resource}) => {
     return (
         <CubeWrapper 
             color={color} 
             onClick={() => handleCubeTouched(index)}
             touched={isTouched}
+            aria-label={value + ' ' + resource}
         />
     )
 }

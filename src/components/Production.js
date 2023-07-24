@@ -62,7 +62,7 @@ const Production = ({ store, adjustProduction }) => {
 
 const Heading = styled.h2``
 
-const Wrapper = styled.div``
+const Wrapper = styled.section``
 
 const ProductionWrapper = styled.div`
     display: grid;

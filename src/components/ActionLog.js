@@ -34,22 +34,22 @@ const ActionLog = () => {
     const time = now.toLocaleTimeString('en-US', timeOptions);
 
     return (
-        <div>
+        <section>
             <Heading>Log</Heading>
             <SectionSpacer size='16px'/>
-            <LogWrapper>
+            <LogList>
                 {log.map((action, i) => <Action key={i} {...action} />)}
                 <Action message='Game started' time={time} divider={false}/>
-            </LogWrapper>
-        </div>
+            </LogList>
+        </section>
     )
 }
 
 const Action = ({ message, amount, icon, time, divider = true }) => {
     return (
-        <ActionWrapper>
+        <ActionListItem>
             <ActionLeft>
-                <IconWrapper>{icon && <Icon src={icons[icon]} alt=''/>}</IconWrapper>
+                <IconWrapper>{icon && <Icon src={icons[icon]} alt={icon}/>}</IconWrapper>
                 { amount && <Amount>{`${amount > 0 ? '+' : ''}${amount}`}</Amount>}
                 <Message>{message}</Message>
             </ActionLeft>
@@ -57,20 +57,22 @@ const Action = ({ message, amount, icon, time, divider = true }) => {
                 { time }
             </Time>
             { divider && <Divider /> }
-        </ActionWrapper>
+        </ActionListItem>
     )
 }
 
 const Heading = styled.h2``
 
-const LogWrapper = styled.div`
+const LogList = styled.ol`
     height: 200px;
     overflow-y: auto;
     border-radius: 8px;
     border: 1px solid ${COLORS.cardBK};
+    margin: 0;
+    padding: 0;
 `
 
-const ActionWrapper = styled.div`
+const ActionListItem = styled.li`
     min-height: 40px;
     display: flex;
     position: relative;

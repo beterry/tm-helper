@@ -63,7 +63,7 @@ const Supply = ({ store, adjustAvailable }) => {
     )
 }
 
-const SupplyWrapper = styled.div`
+const SupplyWrapper = styled.section`
     display: grid;
     grid-template-rows: auto auto 1fr;
     gap: 16px;

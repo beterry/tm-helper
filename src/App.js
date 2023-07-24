@@ -55,7 +55,7 @@ function App() {
     )
 }
 
-const MainWrapper = styled.main`
+const MainWrapper = styled.div`
     min-height: 100%;
     padding: 32px 16px;
     background-color: ${COLORS.background};
@@ -81,7 +81,7 @@ const MaxWidthWrapper = styled.div`
     gap: 32px;
 `
 
-const TerraformRatingWrapper = styled.div`
+const TerraformRatingWrapper = styled.header`
     display: grid;
     grid-template-columns: 1fr;
     gap: 32px;
@@ -92,7 +92,7 @@ const TerraformRatingWrapper = styled.div`
     }
 `
 
-const MainGrid = styled.div`
+const MainGrid = styled.main`
     display: grid;
     grid-template-columns: 1fr;
     gap: 32px;
