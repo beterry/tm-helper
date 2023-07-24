@@ -9,7 +9,7 @@ const LogProvider = ({ children }) => {
     })
 
     // add an action to the log state
-    const addToLog = (message, amount, icon) => {
+    const addToLog = React.useCallback((message, amount, icon) => {
         const now = new Date();
         const timeOptions = { hour: "2-digit", minute: "2-digit", hour12: true }
         const time = now.toLocaleTimeString('en-US', timeOptions);
@@ -19,11 +19,12 @@ const LogProvider = ({ children }) => {
 
         // insert new action into the front of current state
         setLog(prevLog => [newAction, ...prevLog]);
-    }
+    }, [])
 
-    const resetLog = () => {
+    // clear the log
+    const resetLog = React.useCallback(() => {
         setLog([]);
-    }
+    }, [])
 
     React.useEffect(() => {
         localStorage.setItem('log', JSON.stringify(log));
